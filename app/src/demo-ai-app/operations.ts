@@ -1,5 +1,4 @@
 import type { PrismaPromise } from "@prisma/client";
-import OpenAI from "openai";
 import type { GptResponse, Task, User } from "wasp/entities";
 import { HttpError, prisma } from "wasp/server";
 import type {
@@ -13,16 +12,8 @@ import type {
 import * as z from "zod";
 import { SubscriptionStatus } from "../payment/plans";
 import { ensureArgsSchemaOrThrowHttpError } from "../server/validation";
+import { chatCompletion } from "./aiProvider";
 import { GeneratedSchedule, TaskPriority } from "./schedule";
-
-const openAi = setUpOpenAi();
-function setUpOpenAi(): OpenAI {
-  if (process.env.OPENAI_API_KEY) {
-    return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  } else {
-    throw new Error("OpenAI API key is not set");
-  }
-}
 
 //#region Actions
 const generateGptResponseInputSchema = z.object({
@@ -54,12 +45,12 @@ export const generateGptResponse: GenerateGptResponse<
     },
   });
 
-  console.log("Calling open AI api");
+  console.log("Calling AI API to generate schedule");
   const generatedSchedule = await generateScheduleWithGpt(tasks, hours);
   if (generatedSchedule === null) {
     throw new HttpError(
       500,
-      "Encountered a problem in communication with OpenAI",
+      "Encountered a problem in communication with AI provider",
     );
   }
 
@@ -256,87 +247,73 @@ async function generateScheduleWithGpt(
     time,
   }));
 
-  const completion = await openAi.chat.completions.create({
-    model: "gpt-3.5-turbo", // you can use any model here, e.g. 'gpt-3.5-turbo', 'gpt-4', etc.
-    messages: [
-      {
-        role: "system",
-        content:
-          "you are an expert daily planner. you will be given a list of main tasks and an estimated time to complete each task. You will also receive the total amount of hours to be worked that day. Your job is to return a detailed plan of how to achieve those tasks by breaking each task down into at least 3 subtasks each. MAKE SURE TO ALWAYS CREATE AT LEAST 3 SUBTASKS FOR EACH MAIN TASK PROVIDED BY THE USER! YOU WILL BE REWARDED IF YOU DO.",
-      },
-      {
-        role: "user",
-        content: `I will work ${hours} hours today. Here are the tasks I have to complete: ${JSON.stringify(
-          parsedTasks,
-        )}. Please help me plan my day by breaking the tasks down into actionable subtasks with time and priority status.`,
-      },
-    ],
-    tools: [
-      {
-        type: "function",
-        function: {
-          name: "parseTodaysSchedule",
-          description: "parses the days tasks and returns a schedule",
-          parameters: {
-            type: "object",
-            properties: {
-              tasks: {
-                type: "array",
-                description:
-                  "Name of main tasks provided by user, ordered by priority",
-                items: {
-                  type: "object",
-                  properties: {
-                    name: {
-                      type: "string",
-                      description: "Name of main task provided by user",
-                    },
-                    priority: {
-                      type: "string",
-                      enum: ["low", "medium", "high"] as TaskPriority[],
-                      description: "task priority",
-                    },
-                  },
-                },
-              },
-              taskItems: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    description: {
-                      type: "string",
-                      description:
-                        'detailed breakdown and description of sub-task related to main task. e.g., "Prepare your learning session by first reading through the documentation"',
-                    },
-                    time: {
-                      type: "number",
-                      description:
-                        "time allocated for a given subtask in hours, e.g. 0.5",
-                    },
-                    taskName: {
-                      type: "string",
-                      description: "name of main task related to subtask",
-                    },
-                  },
-                },
-              },
-            },
-            required: ["tasks", "taskItems", "time", "priority"],
-          },
-        },
-      },
-    ],
-    tool_choice: {
-      type: "function",
-      function: {
-        name: "parseTodaysSchedule",
-      },
-    },
-    temperature: 1,
-  });
+  try {
+    const systemPrompt = `你是一位专业的日程规划助手。你的任务是将用户提供的任务列表分解为详细的子任务，并合理安排时间。
 
-  const gptResponse =
-    completion?.choices[0]?.message?.tool_calls?.[0]?.function.arguments;
-  return gptResponse !== undefined ? JSON.parse(gptResponse) : null;
+输出格式要求（JSON）:
+{
+  "tasks": [
+    {
+      "name": "任务名称",
+      "priority": "high" | "medium" | "low"
+    }
+  ],
+  "taskItems": [
+    {
+      "description": "子任务详细描述",
+      "time": 0.5,
+      "taskName": "对应的主任务名称"
+    }
+  ]
+}
+
+要求:
+1. 每个主任务至少分解为 3 个子任务
+2. 子任务时间以小时为单位(如 0.5 = 30分钟)
+3. 根据任务重要性设置优先级
+4. 确保所有子任务时间总和不超过用户的工作时长`;
+
+    const userPrompt = `我今天有 ${hours} 小时的工作时间。需要完成以下任务:
+${JSON.stringify(parsedTasks, null, 2)}
+
+请帮我制定详细的日程安排，将每个任务分解为可执行的子任务，并分配时间和优先级。
+请直接返回 JSON 格式的结果，不要包含其他解释文字。`;
+
+    const response = await chatCompletion(
+      [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      "google/gemini-2.0-flash-001", // Fast and cost-effective model
+      0.7,
+      4096
+    );
+
+    console.log("AI Response:", response.text.substring(0, 200));
+    console.log("Token usage:", {
+      prompt: response.promptTokens,
+      completion: response.completionTokens,
+      provider: response.provider,
+    });
+
+    // Extract JSON from response (handle markdown code blocks if present)
+    let jsonText = response.text.trim();
+    if (jsonText.startsWith("```")) {
+      // Remove markdown code block markers
+      jsonText = jsonText.replace(/```json\n?/g, "").replace(/```\n?$/g, "");
+    }
+
+    const schedule = JSON.parse(jsonText);
+
+    // Validate the structure
+    if (!schedule.tasks || !schedule.taskItems) {
+      console.error("Invalid schedule structure:", schedule);
+      return null;
+    }
+
+    return schedule as GeneratedSchedule;
+  } catch (error) {
+    console.error("Error generating schedule:", error);
+    return null;
+  }
 }

@@ -42,9 +42,7 @@ export default function DemoAppPage() {
           </h2>
         </div>
         <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-center text-lg leading-8">
-          This example app uses OpenAI's chat completions with function calling
-          to return a structured JSON object. Try it out, enter your day's
-          tasks, and let AI do the rest!
+          使用 AI 智能规划您的一天！输入任务列表，AI 会自动为您分解任务并合理安排时间。
         </p>
         {/* begin AI-powered Todo List */}
         <Card className="bg-muted/10 my-8">
@@ -386,7 +384,7 @@ function Schedule({ schedule }: { schedule: GeneratedSchedule }) {
             })
         ) : (
           <div className="text-muted-foreground text-center">
-            OpenAI didn't return any Tasks. Try again.
+            AI 没有返回任务。请重试。
           </div>
         )}
       </div>
@@ -432,7 +430,7 @@ function TaskCard({
           </ul>
         ) : (
           <div className="text-muted-foreground text-center">
-            OpenAI didn't return any Task Items. Try again.
+            AI 没有返回任务项。请重试。
           </div>
         )}
       </CardContent>
