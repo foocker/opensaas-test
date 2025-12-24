@@ -13,6 +13,12 @@ import { MAX_FILE_SIZE_BYTES } from "./validation";
 
 export const s3Client = new S3Client({
   region: process.env.AWS_S3_REGION,
+  // Support for Aliyun OSS (S3-compatible)
+  // If ALIYUN_OSS_ENDPOINT is set, use it instead of AWS S3
+  ...(process.env.ALIYUN_OSS_ENDPOINT && {
+    endpoint: process.env.ALIYUN_OSS_ENDPOINT,
+    forcePathStyle: false, // Aliyun OSS uses virtual-hosted-style URLs
+  }),
   credentials: {
     accessKeyId: process.env.AWS_S3_IAM_ACCESS_KEY!,
     secretAccessKey: process.env.AWS_S3_IAM_SECRET_KEY!,
