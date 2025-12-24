@@ -12,21 +12,21 @@ export default function Hero() {
         <div className="max-w-8xl mx-auto px-6 lg:px-8">
           <div className="lg:mb-18 mx-auto max-w-3xl text-center">
             <h1 className="text-foreground text-5xl font-bold sm:text-6xl">
-              Some <span className="italic">cool</span> words about{" "}
-              <span className="text-gradient-primary">your product</span>
+              比 Google AI <span className="italic">便宜</span>{" "}
+              <span className="text-gradient-primary">70%</span> 的 AI 服务平台
             </h1>
             <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-8">
-              With some more exciting words about your product!
+              按需付费，Token 3折扣费。支持 GPT、Claude、Gemini 等主流模型，为开发者提供最实惠的 AI 解决方案。
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button size="lg" variant="outline" asChild>
                 <WaspRouterLink to={routes.PricingPageRoute.to}>
-                  Learn More
+                  查看定价
                 </WaspRouterLink>
               </Button>
               <Button size="lg" variant="default" asChild>
                 <WaspRouterLink to={routes.SignupRoute.to}>
-                  Get Started <span aria-hidden="true">→</span>
+                  立即开始 <span aria-hidden="true">→</span>
                 </WaspRouterLink>
               </Button>
             </div>
