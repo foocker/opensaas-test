@@ -1,3 +1,5 @@
+import { FeatureFlags } from "../shared/config";
+import Clients from "./components/Clients";
 import ExamplesCarousel from "./components/ExamplesCarousel";
 import FAQ from "./components/FAQ";
 import FeaturesGrid from "./components/FeaturesGrid";
@@ -14,17 +16,21 @@ import {
 import AIReady from "./ExampleHighlightedFeature";
 
 export default function LandingPage() {
+  const landingPageConfig = FeatureFlags.landingPage;
+
   return (
     <div className="bg-background text-foreground">
       <main className="isolate">
-        <Hero />
-        <ExamplesCarousel examples={examples} />
-        <AIReady />
-        <FeaturesGrid features={features} />
-        <Testimonials testimonials={testimonials} />
-        <FAQ faqs={faqs} />
+        {landingPageConfig.showHero && <Hero />}
+        {landingPageConfig.showExamples && <ExamplesCarousel examples={examples} />}
+        {landingPageConfig.showClients && <Clients />}
+        {landingPageConfig.showHighlightedFeature && <AIReady />}
+        {/* showFeatures 使用传统列表式功能展示，需要不同的数据格式，当前未启用 */}
+        {landingPageConfig.showFeaturesGrid && <FeaturesGrid features={features} />}
+        {landingPageConfig.showTestimonials && <Testimonials testimonials={testimonials} />}
+        {landingPageConfig.showFAQ && <FAQ faqs={faqs} />}
       </main>
-      <Footer footerNavigation={footerNavigation} />
+      {landingPageConfig.showFooter && <Footer footerNavigation={footerNavigation} />}
     </div>
   );
 }
