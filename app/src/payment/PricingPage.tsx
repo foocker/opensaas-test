@@ -2,11 +2,6 @@ import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "wasp/client/auth";
-import {
-  generateCheckoutSession,
-  getCustomerPortalUrl,
-  useQuery,
-} from "wasp/client/operations";
 import { Alert, AlertDescription } from "../client/components/ui/alert";
 import { Button } from "../client/components/ui/button";
 import {
@@ -16,142 +11,68 @@ import {
   CardTitle,
 } from "../client/components/ui/card";
 import { cn } from "../client/utils";
-import {
-  PaymentPlanId,
-  paymentPlans,
-  prettyPaymentPlanName,
-  SubscriptionStatus,
-} from "./plans";
 
-const bestDealPaymentPlanId: PaymentPlanId = PaymentPlanId.Pro;
-
-interface PaymentPlanCard {
-  name: string;
-  price: string;
-  description: string;
-  features: string[];
-}
-
-export const paymentPlanCards: Record<PaymentPlanId, PaymentPlanCard> = {
-  [PaymentPlanId.Hobby]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Hobby),
-    price: "$9.99",
-    description: "All you need to get started",
-    features: ["Limited monthly usage", "Basic support"],
-  },
-  [PaymentPlanId.Pro]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Pro),
-    price: "$19.99",
-    description: "Our most popular plan",
-    features: ["Unlimited monthly usage", "Priority customer support"],
-  },
-  [PaymentPlanId.Credits10]: {
-    name: prettyPaymentPlanName(PaymentPlanId.Credits10),
-    price: "$9.99",
-    description: "One-time purchase of 10 credits for your account",
-    features: ["Use credits for e.g. OpenAI API calls", "No expiration date"],
-  },
-};
+// 充值套餐选项
+const rechargeOptions = [
+  { amount: 9.9, label: "¥9.9", description: "入门充值", popular: false },
+  { amount: 50, label: "¥50", description: "推荐充值", popular: true },
+  { amount: 100, label: "¥100", description: "超值充值", popular: false },
+  { amount: 200, label: "¥200", description: "大额充值", popular: false },
+];
 
 const PricingPage = () => {
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { data: user } = useAuth();
-  const isUserSubscribed =
-    !!user &&
-    !!user.subscriptionStatus &&
-    user.subscriptionStatus !== SubscriptionStatus.Deleted;
-
-  const {
-    data: customerPortalUrl,
-    isLoading: isCustomerPortalUrlLoading,
-    error: customerPortalUrlError,
-  } = useQuery(getCustomerPortalUrl, { enabled: isUserSubscribed });
-
   const navigate = useNavigate();
 
-  async function handleBuyNowClick(paymentPlanId: PaymentPlanId) {
+  async function handleRechargeClick(amount: number) {
     if (!user) {
       navigate("/login");
       return;
     }
-    try {
-      setIsPaymentLoading(true);
 
-      const checkoutResults = await generateCheckoutSession(paymentPlanId);
-
-      if (checkoutResults?.sessionUrl) {
-        window.open(checkoutResults.sessionUrl, "_self");
-      } else {
-        throw new Error("Error generating checkout session URL");
-      }
-    } catch (error: unknown) {
-      console.error(error);
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage("Error processing payment. Please try again later.");
-      }
-      setIsPaymentLoading(false); // We only set this to false here and not in the try block because we redirect to the checkout url within the same window
-    }
+    // TODO: 实现充值逻辑
+    // 这里将来会调用支付宝充值接口
+    console.log(`Recharge amount: ${amount}`);
+    setErrorMessage("充值功能即将上线！");
   }
-
-  const handleCustomerPortalClick = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    if (customerPortalUrlError) {
-      setErrorMessage("Error fetching Customer Portal URL");
-      return;
-    }
-
-    if (!customerPortalUrl) {
-      setErrorMessage(`Customer Portal does not exist for user ${user.id}`);
-      return;
-    }
-
-    window.open(customerPortalUrl, "_blank");
-  };
 
   return (
     <div className="py-10 lg:mt-10">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div id="pricing" className="mx-auto max-w-4xl text-center">
           <h2 className="text-foreground mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            Pick your <span className="text-primary">pricing</span>
+            <span className="text-primary">按需付费</span>，用多少付多少
           </h2>
         </div>
         <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-center text-lg leading-8">
-          Choose between Stripe, LemonSqueezy or Polar as your payment provider.
-          Just add your Product IDs! Try it out below with test credit card
-          number <br />
-          <span className="bg-muted text-muted-foreground rounded-md px-2 py-1 font-mono text-sm">
-            4242 4242 4242 4242 4242
-          </span>
+          充值后即可使用 AI 服务，Token 按 <span className="text-primary font-bold">3折</span> 实时扣费
+          <br />
+          余额不足时会自动提醒，随时充值，无需担心
         </p>
+
         {errorMessage && (
-          <Alert variant="destructive" className="mt-8">
+          <Alert variant="destructive" className="mt-8 max-w-2xl mx-auto">
             <AlertDescription>{errorMessage}</AlertDescription>
           </Alert>
         )}
-        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8">
-          {Object.values(PaymentPlanId).map((planId) => (
+
+        {/* 充值套餐卡片 */}
+        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4 lg:gap-x-8">
+          {rechargeOptions.map((option) => (
             <Card
-              key={planId}
+              key={option.amount}
               className={cn(
                 "relative flex grow flex-col justify-between overflow-hidden transition-all duration-300 hover:shadow-lg",
                 {
-                  "ring-primary !bg-transparent ring-2":
-                    planId === bestDealPaymentPlanId,
-                  "ring-border ring-1 lg:my-8":
-                    planId !== bestDealPaymentPlanId,
+                  "ring-primary !bg-transparent ring-2": option.popular,
+                  "ring-border ring-1 lg:my-8": !option.popular,
                 },
               )}
             >
-              {planId === bestDealPaymentPlanId && (
+              {option.popular && (
                 <div
                   className="absolute right-0 top-0 -z-10 h-full w-full transform-gpu blur-3xl"
                   aria-hidden="true"
@@ -164,71 +85,101 @@ const PricingPage = () => {
                   />
                 </div>
               )}
+
               <CardContent className="h-full justify-between p-8 xl:p-10">
                 <div className="flex items-center justify-between gap-x-4">
-                  <CardTitle
-                    id={planId}
-                    className="text-foreground text-lg font-semibold leading-8"
-                  >
-                    {paymentPlanCards[planId].name}
+                  <CardTitle className="text-foreground text-lg font-semibold leading-8">
+                    {option.description}
                   </CardTitle>
+                  {option.popular && (
+                    <span className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-xs font-semibold">
+                      推荐
+                    </span>
+                  )}
                 </div>
-                <p className="text-muted-foreground mt-4 text-sm leading-6">
-                  {paymentPlanCards[planId].description}
-                </p>
+
                 <p className="mt-6 flex items-baseline gap-x-1">
                   <span className="text-foreground text-4xl font-bold tracking-tight">
-                    {paymentPlanCards[planId].price}
-                  </span>
-                  <span className="text-muted-foreground text-sm font-semibold leading-6">
-                    {paymentPlans[planId].effect.kind === "subscription" &&
-                      "/month"}
+                    {option.label}
                   </span>
                 </p>
+
                 <ul
                   role="list"
                   className="text-muted-foreground mt-8 space-y-3 text-sm leading-6"
                 >
-                  {paymentPlanCards[planId].features.map((feature) => (
-                    <li key={feature} className="flex gap-x-3">
-                      <CheckCircle
-                        className="text-primary h-5 w-5 flex-none"
-                        aria-hidden="true"
-                      />
-                      {feature}
-                    </li>
-                  ))}
+                  <li className="flex gap-x-3">
+                    <CheckCircle
+                      className="text-primary h-5 w-5 flex-none"
+                      aria-hidden="true"
+                    />
+                    一次性充值 {option.amount} 元
+                  </li>
+                  <li className="flex gap-x-3">
+                    <CheckCircle
+                      className="text-primary h-5 w-5 flex-none"
+                      aria-hidden="true"
+                    />
+                    Token 3折实时扣费
+                  </li>
+                  <li className="flex gap-x-3">
+                    <CheckCircle
+                      className="text-primary h-5 w-5 flex-none"
+                      aria-hidden="true"
+                    />
+                    无使用期限
+                  </li>
                 </ul>
               </CardContent>
+
               <CardFooter>
-                {isUserSubscribed ? (
-                  <Button
-                    onClick={handleCustomerPortalClick}
-                    disabled={isCustomerPortalUrlLoading}
-                    aria-describedby="manage-subscription"
-                    variant={
-                      planId === bestDealPaymentPlanId ? "default" : "outline"
-                    }
-                    className="w-full"
-                  >
-                    Manage Subscription
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => handleBuyNowClick(planId)}
-                    aria-describedby={planId}
-                    variant={
-                      planId === bestDealPaymentPlanId ? "default" : "outline"
-                    }
-                    className="w-full"
-                    disabled={isPaymentLoading}
-                  >
-                    {!!user ? "Buy plan" : "Log in to buy plan"}
-                  </Button>
-                )}
+                <Button
+                  onClick={() => handleRechargeClick(option.amount)}
+                  variant={option.popular ? "default" : "outline"}
+                  className="w-full"
+                  disabled={isPaymentLoading}
+                >
+                  {!!user ? "立即充值" : "登录后充值"}
+                </Button>
               </CardFooter>
             </Card>
           ))}
+        </div>
+
+        {/* 计费说明 */}
+        <div className="mx-auto mt-16 max-w-2xl">
+          <h3 className="text-foreground text-2xl font-bold text-center mb-6">
+            计费说明
+          </h3>
+          <div className="bg-muted rounded-lg p-6 space-y-4">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-primary h-5 w-5 flex-none mt-0.5" />
+              <div>
+                <p className="text-foreground font-semibold">按需付费</p>
+                <p className="text-muted-foreground text-sm">
+                  每次 AI 调用前实时扣费，Token 按市场价的 30% 计费
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-primary h-5 w-5 flex-none mt-0.5" />
+              <div>
+                <p className="text-foreground font-semibold">余额透明</p>
+                <p className="text-muted-foreground text-sm">
+                  在用户中心随时查看钱包余额和消费记录
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-primary h-5 w-5 flex-none mt-0.5" />
+              <div>
+                <p className="text-foreground font-semibold">余额预警</p>
+                <p className="text-muted-foreground text-sm">
+                  余额低于 10 元时自动提醒，避免服务中断
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
