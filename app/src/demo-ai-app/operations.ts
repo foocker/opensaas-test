@@ -284,7 +284,7 @@ ${JSON.stringify(parsedTasks, null, 2)}
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      "google/gemini-2.0-flash-001", // Fast and cost-effective model
+      "google/gemini-2.0-flash-exp", // 使用 Gemini 2.0 Flash (免费且快速)
       0.7,
       4096
     );

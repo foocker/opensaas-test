@@ -1,14 +1,26 @@
 /**
  * AI Provider Abstraction Layer
- * Supports OpenRouter and Nano API with OpenAI-compatible interfaces
+ * 统一处理 OpenRouter 和 Nano API 的调用接口
  */
 
-interface ChatMessage {
-  role: "system" | "user" | "assistant";
-  content: string;
+import type { ApiProviderConfig } from "./apiProviders";
+import {
+  getEnabledProviders,
+  getMappedModelName,
+  getApiKey,
+  getProviderById,
+} from "./apiProviders";
+
+// Chat completion 请求参数
+export interface ChatCompletionRequest {
+  messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
+  model: string;
+  temperature?: number;
+  maxTokens?: number;
 }
 
-interface ChatCompletionResponse {
+// Chat completion 响应
+export interface ChatCompletionResponse {
   text: string;
   promptTokens: number;
   completionTokens: number;
@@ -16,42 +28,36 @@ interface ChatCompletionResponse {
   provider: string;
 }
 
-interface AIProviderConfig {
-  id: string;
-  name: string;
-  baseUrl: string;
-  apiKey: string;
-}
-
 /**
  * OpenRouter Provider
- * Uses OpenAI-compatible chat completions API
+ * Uses OpenAI-compatible /chat/completions API
  */
 class OpenRouterProvider {
-  private config: AIProviderConfig;
+  private config: ApiProviderConfig;
+  private apiKey: string;
 
-  constructor(config: AIProviderConfig) {
+  constructor(config: ApiProviderConfig, apiKey: string) {
     this.config = config;
+    this.apiKey = apiKey;
   }
 
-  async chatCompletion(
-    messages: ChatMessage[],
-    model: string = "google/gemini-2.0-flash-001",
-    temperature: number = 0.7,
-    maxTokens: number = 4096
-  ): Promise<ChatCompletionResponse> {
+  async chatCompletion(request: ChatCompletionRequest): Promise<ChatCompletionResponse> {
+    const modelName = getMappedModelName(this.config, request.model);
+
     const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${this.config.apiKey}`,
+        "Authorization": `Bearer ${this.apiKey}`,
+        ...(this.config.headers || {}),
       },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens: maxTokens,
+        model: modelName,
+        messages: request.messages,
+        temperature: request.temperature || 0.7,
+        max_tokens: request.maxTokens || 4096,
       }),
+      signal: AbortSignal.timeout(this.config.timeout || 300000),
     });
 
     if (!response.ok) {
@@ -65,7 +71,7 @@ class OpenRouterProvider {
       text: data.choices[0]?.message?.content || "",
       promptTokens: data.usage?.prompt_tokens || 0,
       completionTokens: data.usage?.completion_tokens || 0,
-      model: data.model || model,
+      model: data.model || modelName,
       provider: this.config.id,
     };
   }
@@ -73,33 +79,33 @@ class OpenRouterProvider {
 
 /**
  * Nano API Provider
- * Uses OpenAI-compatible chat completions API
+ * Uses OpenAI-compatible /chat/completions API
  */
 class NanoApiProvider {
-  private config: AIProviderConfig;
+  private config: ApiProviderConfig;
+  private apiKey: string;
 
-  constructor(config: AIProviderConfig) {
+  constructor(config: ApiProviderConfig, apiKey: string) {
     this.config = config;
+    this.apiKey = apiKey;
   }
 
-  async chatCompletion(
-    messages: ChatMessage[],
-    model: string = "google/gemini-2.0-flash-001",
-    temperature: number = 0.7,
-    maxTokens: number = 4096
-  ): Promise<ChatCompletionResponse> {
+  async chatCompletion(request: ChatCompletionRequest): Promise<ChatCompletionResponse> {
+    const modelName = getMappedModelName(this.config, request.model);
+
     const response = await fetch(`${this.config.baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${this.config.apiKey}`,
+        "Authorization": `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens: maxTokens,
+        model: modelName,
+        messages: request.messages,
+        temperature: request.temperature || 0.7,
+        max_tokens: request.maxTokens || 4096,
       }),
+      signal: AbortSignal.timeout(this.config.timeout || 300000),
     });
 
     if (!response.ok) {
@@ -113,59 +119,109 @@ class NanoApiProvider {
       text: data.choices[0]?.message?.content || "",
       promptTokens: data.usage?.prompt_tokens || 0,
       completionTokens: data.usage?.completion_tokens || 0,
-      model: data.model || model,
+      model: data.model || modelName,
       provider: this.config.id,
     };
   }
 }
 
 /**
- * Get available AI provider
- * Priority: OpenRouter > Nano API
+ * 创建提供商实例
  */
-export function getAIProvider(): OpenRouterProvider | NanoApiProvider | null {
-  // Try OpenRouter first
-  if (process.env.OPENROUTER_API_KEY) {
-    return new OpenRouterProvider({
-      id: "openrouter",
-      name: "OpenRouter",
-      baseUrl: "https://openrouter.ai/api/v1",
-      apiKey: process.env.OPENROUTER_API_KEY,
-    });
+function createProvider(
+  config: ApiProviderConfig,
+  apiKey: string
+): OpenRouterProvider | NanoApiProvider {
+  switch (config.id) {
+    case "nano_api":
+      return new NanoApiProvider(config, apiKey);
+    case "openrouter":
+      return new OpenRouterProvider(config, apiKey);
+    default:
+      throw new Error(`Unknown provider: ${config.id}`);
   }
-
-  // Fallback to Nano API
-  if (process.env.NANO_API_KEY && process.env.NANO_API_BASE_URL) {
-    return new NanoApiProvider({
-      id: "nano_api",
-      name: "Nano API",
-      baseUrl: process.env.NANO_API_BASE_URL,
-      apiKey: process.env.NANO_API_KEY,
-    });
-  }
-
-  return null;
 }
 
 /**
- * Chat completion wrapper
- * Automatically selects available provider
+ * 统一的 Chat Completion 接口
+ * 自动选择可用的提供商
  */
 export async function chatCompletion(
-  messages: ChatMessage[],
-  model: string = "google/gemini-2.0-flash-001",
+  messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
+  model: string = "google/gemini-2.0-flash-exp",
   temperature: number = 0.7,
   maxTokens: number = 4096
 ): Promise<ChatCompletionResponse> {
-  const provider = getAIProvider();
+  const enabledProviders = getEnabledProviders();
 
-  if (!provider) {
+  if (enabledProviders.length === 0) {
     throw new Error(
-      "No AI provider configured. Please set OPENROUTER_API_KEY or NANO_API_KEY in .env.server"
+      "No AI provider available. Please configure OPENROUTER_API_KEY or NANO_API_KEY in .env.server"
     );
   }
 
-  return provider.chatCompletion(messages, model, temperature, maxTokens);
+  let lastError: Error | null = null;
+
+  for (const providerConfig of enabledProviders) {
+    try {
+      const apiKey = getApiKey(providerConfig);
+      if (!apiKey) {
+        console.warn(`[AI Provider] Skipping ${providerConfig.name}: No API key found`);
+        continue;
+      }
+
+      console.log(`[AI Provider] Trying ${providerConfig.name} (priority ${providerConfig.priority})...`);
+
+      const provider = createProvider(providerConfig, apiKey);
+      const response = await provider.chatCompletion({
+        messages,
+        model,
+        temperature,
+        maxTokens,
+      });
+
+      console.log(`[AI Provider] ✓ Success with ${response.provider} (model: ${response.model})`);
+      return response;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`[AI Provider] ✗ Failed with ${providerConfig.name}:`, errorMessage);
+      lastError = error instanceof Error ? error : new Error(errorMessage);
+      continue;
+    }
+  }
+
+  throw lastError || new Error("All AI providers failed");
 }
 
-export type { ChatMessage, ChatCompletionResponse };
+/**
+ * 使用指定提供商
+ */
+export async function chatCompletionWithProvider(
+  providerId: string,
+  messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
+  model: string = "google/gemini-2.0-flash-exp",
+  temperature: number = 0.7,
+  maxTokens: number = 4096
+): Promise<ChatCompletionResponse> {
+  const providerConfig = getProviderById(providerId as any);
+  if (!providerConfig) {
+    throw new Error(`Provider not found: ${providerId}`);
+  }
+
+  if (!providerConfig.enabled) {
+    throw new Error(`Provider is disabled: ${providerId}`);
+  }
+
+  const apiKey = getApiKey(providerConfig);
+  if (!apiKey) {
+    throw new Error(`API key not found for provider: ${providerConfig.name}`);
+  }
+
+  const provider = createProvider(providerConfig, apiKey);
+  return provider.chatCompletion({
+    messages,
+    model,
+    temperature,
+    maxTokens,
+  });
+}
