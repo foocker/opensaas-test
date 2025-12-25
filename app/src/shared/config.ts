@@ -53,6 +53,8 @@ export const FeatureFlags = {
   // 每个区块都可以独立开关，支持快速组合不同的首页效果
   landingPage: {
     showHero: true,              // Hero 区域（主标题、副标题、CTA 按钮）
+    showAITemplates: true,       // AI 精选模板（精选的 AI 图像生成模板）
+    showBananaPlayground: true,  // Banana 游乐场（AI 图像生成交互界面）
     showExamples: false,          // 示例轮播（展示使用案例）
     showClients: false,          // 客户/技术栈 Logo 展示（Used by）
     showHighlightedFeature: false, // 突出功能展示（大图 + 文字说明）

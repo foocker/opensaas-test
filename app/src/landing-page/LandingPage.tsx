@@ -1,4 +1,6 @@
 import { FeatureFlags } from "../shared/config";
+import AITemplates from "./components/AITemplates";
+import BananaPlayground from "./components/BananaPlayground";
 import Clients from "./components/Clients";
 import ExamplesCarousel from "./components/ExamplesCarousel";
 import FAQ from "./components/FAQ";
@@ -22,6 +24,8 @@ export default function LandingPage() {
     <div className="bg-background text-foreground">
       <main className="isolate">
         {landingPageConfig.showHero && <Hero />}
+        {landingPageConfig.showAITemplates && <AITemplates />}
+        {landingPageConfig.showBananaPlayground && <BananaPlayground />}
         {landingPageConfig.showExamples && <ExamplesCarousel examples={examples} />}
         {landingPageConfig.showClients && <Clients />}
         {landingPageConfig.showHighlightedFeature && <AIReady />}

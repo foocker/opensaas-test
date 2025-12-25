@@ -37,9 +37,23 @@ export const API_PROVIDERS: ApiProviderConfig[] = [
     id: 'nano_api',
     name: 'Nano Banana API',
     apiKeyEnv: 'NANO_API_KEY',
-    baseUrl: process.env.NANO_API_BASE_URL || 'https://api.naga.ac/v1',
+    baseUrl: 'https://api.nanobananai.com', // Gemini 兼容接口
     enabled: true,
     priority: 1, // 最高优先级
+    supportedModels: [
+      'google/gemini-2.5-flash',
+      'google/gemini-3-pro-preview',
+      'google/gemini-2.5-flash-image-preview',
+      'google/gemini-3-pro-image-preview'
+    ],
+    modelMapping: {
+      // 文本模型映射
+      'google/gemini-2.5-flash': 'gemini-2.5-flash',
+      'google/gemini-3-pro-preview': 'gemini-3-pro-preview',
+      // 图像模型映射
+      'google/gemini-2.5-flash-image-preview': 'gemini-2.5-flash-image',
+      'google/gemini-3-pro-image-preview': 'gemini-3-pro-image-preview'
+    },
     timeout: 300000, // 5分钟
   },
   {

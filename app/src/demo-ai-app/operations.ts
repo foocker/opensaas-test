@@ -12,7 +12,7 @@ import type {
 import * as z from "zod";
 import { SubscriptionStatus } from "../payment/plans";
 import { ensureArgsSchemaOrThrowHttpError } from "../server/validation";
-import { chatCompletion } from "./aiProvider";
+import { chatCompletion, imageGeneration } from "./aiProvider";
 import { GeneratedSchedule, TaskPriority } from "./schedule";
 
 //#region Actions
@@ -317,3 +317,83 @@ ${JSON.stringify(parsedTasks, null, 2)}
     return null;
   }
 }
+
+//#region Image Generation Action
+const generateImageInputSchema = z.object({
+  model: z.string(),
+  prompt: z.string().nonempty(),
+  images: z.array(z.string()).optional(),
+  aspectRatio: z.string().optional(),
+  outputSize: z.string().optional(),
+});
+
+type GenerateImageInput = z.infer<typeof generateImageInputSchema>;
+
+export const generateImage = async (
+  rawArgs: GenerateImageInput,
+  context: any
+) => {
+  if (!context.user) {
+    throw new HttpError(
+      401,
+      "Only authenticated users are allowed to perform this operation"
+    );
+  }
+
+  const args = ensureArgsSchemaOrThrowHttpError(
+    generateImageInputSchema,
+    rawArgs
+  );
+
+  console.log("Calling AI API to generate image");
+  
+  try {
+    const result = await imageGeneration({
+      model: args.model,
+      prompt: args.prompt,
+      images: args.images,
+      aspectRatio: args.aspectRatio,
+      outputSize: args.outputSize,
+    });
+
+    console.log("Image generated successfully:", {
+      model: result.model,
+      provider: result.provider,
+      promptTokens: result.promptTokens,
+      completionTokens: result.completionTokens,
+    });
+
+    // Decrement credits for users without an active subscription
+    if (!isUserSubscribed(context.user)) {
+      if (context.user.credits > 0) {
+        await context.entities.User.update({
+          where: { id: context.user.id },
+          data: {
+            credits: {
+              decrement: 1,
+            },
+          },
+        });
+        console.log("Credits decremented");
+      } else {
+        throw new HttpError(
+          402,
+          "User has no subscription and is out of credits"
+        );
+      }
+    }
+
+    return {
+      imageBase64: result.imageBase64,
+      model: result.model,
+      provider: result.provider,
+    };
+  } catch (error) {
+    console.error("Error generating image:", error);
+    throw new HttpError(
+      500,
+      error instanceof Error ? error.message : "Failed to generate image"
+    );
+  }
+};
+//#endregion

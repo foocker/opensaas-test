@@ -1,2 +1,7 @@
 node_modules/
 .wasp/
+public/templates/
+
+# Proprietary prompt data (not for open source)
+src/landing-page/prompts.json
+src/landing-page/promptsData.ts

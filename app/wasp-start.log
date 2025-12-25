@@ -1,0 +1,142 @@
+[33m
+🐝 --- Starting compilation and setup phase. Hold tight... ------------------------
+[0m
+[33m
+🐝 --- Compiling wasp project... --------------------------------------------------
+[0m
+[33m
+✅ --- Successfully completed npm install. ----------------------------------------
+[0m
+[33m
+🐝 --- Setting up database... -----------------------------------------------------
+[0m
+[33m
+✅ --- Database successfully set up. ----------------------------------------------
+[0m
+[33m
+🐝 --- Building SDK... ------------------------------------------------------------
+[0m
+
+[33m[[0m  [33mWasp[0m  [33m][0m > wasp@1.0.0 build
+[33m[[0m  [33mWasp[0m  [33m][0m > tsc && node ./scripts/copy-assets.js
+[33m[[0m  [33mWasp[0m  [33m][0m [33m
+✅ --- SDK built successfully. ----------------------------------------------------
+[0m
+[33m
+✅ --- Your wasp project has successfully compiled. -------------------------------
+[0m
+[33m
+🐝 --- Listening for file changes... ----------------------------------------------
+[0m
+[33m
+🐝 --- Starting up generated project... -------------------------------------------
+[0m
+
+[35m[[0m [35mServer[0m [35m][0m > @wasp.sh/generated-server-dev@0.0.0 watch
+[35m[[0m [35mServer[0m [35m][0m > nodemon --exec 'npm run bundle-and-start || exit 1'
+[35m[[0m [35mServer[0m [35m][0m 
+[36m[[0m [36mClient[0m [36m][0m > @wasp.sh/generated-webapp-dev@0.0.0 start
+[36m[[0m [36mClient[0m [36m][0m > vite
+[36m[[0m [36mClient[0m [36m][0m 
+[35m[[0m [35mServer[0m [35m][0m [33m[nodemon] 2.0.22[39m
+[35m[[0m [35mServer[0m [35m][0m [33m[nodemon] to restart at any time, enter `rs`[39m
+[35m[[0m [35mServer[0m [35m][0m [33m[nodemon] watching path(s): src/**/* ../../../src/**/* .env[39m
+[35m[[0m [35mServer[0m [35m][0m [33m[nodemon] watching extensions: ts,mts,js,mjs,json[39m
+[35m[[0m [35mServer[0m [35m][0m [32m[nodemon] starting `npm run bundle-and-start || exit 1`[39m
+[35m[[0m [35mServer[0m [35m][0m 
+[35m[[0m [35mServer[0m [35m][0m > @wasp.sh/generated-server-dev@0.0.0 bundle-and-start
+[35m[[0m [35mServer[0m [35m][0m > npm run bundle && npm run start
+[35m[[0m [35mServer[0m [35m][0m 
+[35m[[0m [35mServer[0m [35m][0m 
+[35m[[0m [35mServer[0m [35m][0m > @wasp.sh/generated-server-dev@0.0.0 bundle
+[35m[[0m [35mServer[0m [35m][0m > tsc --build && rollup --config --silent
+[35m[[0m [35mServer[0m [35m][0m 
+[36m[[0m [36mClient[0m [36m][0m 
+[36m[[0m [36mClient[0m [36m][0m   VITE v7.3.0  ready in 150 ms
+[36m[[0m [36mClient[0m [36m][0m 
+[36m[[0m [36mClient[0m [36m][0m   ➜  Local:   http://localhost:3000/
+[36m[[0m [36mClient[0m [36m][0m   ➜  Network: http://10.255.255.254:3000/
+[36m[[0m [36mClient[0m [36m][0m   ➜  Network: http://192.168.1.6:3000/
+[36m[[0m [36mClient[0m[1m[31m![0m[36m][0m warn - The class `!delay-[0]` is ambiguous and matches multiple utilities.
+[36m[[0m [36mClient[0m[1m[31m![0m[36m][0m warn - If this is content and not a class, replace it with `!delay-&lsqb;0&rsqb;` to silence this warning.
+[36m[[0m [36mClient[0m[1m[31m![0m[36m][0m 
+[36m[[0m [36mClient[0m[1m[31m![0m[36m][0m warn - The class `delay-[0]` is ambiguous and matches multiple utilities.
+[36m[[0m [36mClient[0m[1m[31m![0m[36m][0m warn - If this is content and not a class, replace it with `delay-&lsqb;0&rsqb;` to silence this warning.[33m
+🐝 --- Recompiling on file change... ----------------------------------------------
+[0m
+[33m
+✅ --- Successfully completed npm install. ----------------------------------------
+[0m
+[33m
+🐝 --- Setting up database... -----------------------------------------------------
+[0m
+
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Form.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Message.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/auth-styles.css
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialButton.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialIcons.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:09 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx[33m
+✅ --- Database successfully set up. ----------------------------------------------
+[0m
+[33m
+🐝 --- Building SDK... ------------------------------------------------------------
+[0m
+
+[33m[[0m  [33mWasp[0m  [33m][0m > wasp@1.0.0 build
+[33m[[0m  [33mWasp[0m  [33m][0m > tsc && node ./scripts/copy-assets.js
+[33m[[0m  [33mWasp[0m  [33m][0m 
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Form.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Message.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/auth-styles.css
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialButton.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialIcons.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx[33m
+✅ --- SDK built successfully. ----------------------------------------------------
+[0m
+[33m
+✅ --- Your wasp project has successfully compiled. -------------------------------
+[0m
+[33m
+✅ --- Recompilation on file change succeeded. ------------------------------------
+[0m
+
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr invalidate /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[36m[[0m [36mClient[0m [36m][0m 10:37:12 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Signup.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Login.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/VerifyEmail.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ResetPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ForgotPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/VerifyEmailForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ForgotPasswordForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ResetPasswordForm.jsx
+[35m[[0m [35mServer[0m [35m][0m 
+[35m[[0m [35mServer[0m [35m][0m > @wasp.sh/generated-server-dev@0.0.0 start
+[35m[[0m [35mServer[0m [35m][0m > node --enable-source-maps -r dotenv/config bundle/server.js
+[35m[[0m [35mServer[0m [35m][0m 
+[35m[[0m [35mServer[0m [35m][0m 🚀 "Google" auth initialized
+[35m[[0m [35mServer[0m [35m][0m 🚀 "Email and password" auth initialized
+[35m[[0m [35mServer[0m [35m][0m Starting pg-boss...
+[35m[[0m [35mServer[0m [35m][0m pg-boss started!
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m Port 3001 is already in use
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error Lifecycle script `start` failed with error:
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error code 1
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error path /home/gg/opensaas-test/app/.wasp/out/server
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error workspace @wasp.sh/generated-server-dev@0.0.0
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error location /home/gg/opensaas-test/app/.wasp/out/server
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error command failed
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error command sh -c node --enable-source-maps -r dotenv/config bundle/server.js
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error Lifecycle script `bundle-and-start` failed with error:
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error code 1
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error path /home/gg/opensaas-test/app/.wasp/out/server
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error workspace @wasp.sh/generated-server-dev@0.0.0
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error location /home/gg/opensaas-test/app/.wasp/out/server
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error command failed
+[35m[[0m [35mServer[0m[1m[31m![0m[35m][0m npm error command sh -c npm run bundle && npm run start
+[35m[[0m [35mServer[0m [35m][0m [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Form.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/Message.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/auth-styles.css
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialButton.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/social/SocialIcons.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr invalidate /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Signup.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Login.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/VerifyEmail.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ResetPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ForgotPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/VerifyEmailForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ForgotPasswordForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ResetPasswordForm.jsx
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr invalidate /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Auth.jsx Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[36m[[0m [36mClient[0m [36m][0m 10:37:14 AM [vite] (client) hmr update /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Signup.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/Login.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/VerifyEmail.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ResetPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/ForgotPassword.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/VerifyEmailForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/common/LoginSignupForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ForgotPasswordForm.jsx, /@fs/home/gg/opensaas-test/app/.wasp/out/sdk/wasp/dist/auth/forms/internal/email/ResetPasswordForm.jsx

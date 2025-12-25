@@ -5,6 +5,10 @@ app NanoBananaMagic {
 
   title: "Nano Banana Magic - AI服务平台",
 
+  server: {
+    middlewareConfigFn: import { customMiddlewareConfigFn } from "@src/server/middleware"
+  },
+
   head: [
     "<link rel='icon' href='/favicon.ico' />",
     "<meta charset='utf-8' />",
@@ -180,6 +184,11 @@ query getGptResponses {
 query getAllTasksByUser {
   fn: import { getAllTasksByUser } from "@src/demo-ai-app/operations",
   entities: [Task]
+}
+
+action generateImage {
+  fn: import { generateImage } from "@src/demo-ai-app/operations",
+  entities: [User]
 }
 //#endregion
 
