@@ -103,12 +103,31 @@ async function handleInvoicePaid(
   const invoice = event.data.object;
   const customerId = getCustomerId(invoice.customer);
   const invoicePaidAtDate = getInvoicePaidAtDate(invoice);
-  const paymentPlanId = getPaymentPlanIdByPaymentProcessorPlanId(
-    getInvoicePriceId(invoice),
-  );
+  const priceId = getInvoicePriceId(invoice);
+
+  console.log('[Stripe Webhook] invoice.paid event received:', {
+    customerId,
+    priceId,
+    invoicePaidAtDate,
+  });
+
+  const paymentPlanId = getPaymentPlanIdByPaymentProcessorPlanId(priceId);
+
+  console.log('[Stripe Webhook] Payment plan identified:', {
+    paymentPlanId,
+    credits: paymentPlans[paymentPlanId].effect,
+  });
 
   switch (paymentPlanId) {
     case PaymentPlanId.Credits10:
+    case PaymentPlanId.Credits50:
+    case PaymentPlanId.Credits100:
+    case PaymentPlanId.Credits200:
+      console.log('[Stripe Webhook] Updating user credits:', {
+        customerId,
+        credits: paymentPlans[paymentPlanId].effect.amount,
+      });
+
       await updateUserCredits(
         {
           paymentProcessorUserId: customerId,
@@ -117,6 +136,8 @@ async function handleInvoicePaid(
         },
         prismaUserDelegate,
       );
+
+      console.log('[Stripe Webhook] ✅ Credits updated successfully');
       break;
     case PaymentPlanId.Pro:
     case PaymentPlanId.Hobby:

@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { PrismaClient } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { type User } from "wasp/entities";
 import {
   getSubscriptionPaymentPlanIds,
@@ -34,10 +35,10 @@ function generateMockUserData(): MockUserData {
   const now = new Date();
   const createdAt = faker.date.past({ refDate: now });
   const timePaid = faker.date.between({ from: createdAt, to: now });
-  const credits = subscriptionStatus
-    ? 0
-    : faker.number.int({ min: 0, max: 10 });
-  const hasUserPaidOnStripe = !!subscriptionStatus || credits > 3;
+  const credits = new Decimal(
+    subscriptionStatus ? 0 : faker.number.int({ min: 0, max: 10 })
+  );
+  const hasUserPaidOnStripe = !!subscriptionStatus || Number(credits) > 3;
   return {
     email: faker.internet.email({ firstName, lastName }),
     username: faker.internet.userName({ firstName, lastName }),
@@ -45,7 +46,6 @@ function generateMockUserData(): MockUserData {
     isAdmin: false,
     credits,
     subscriptionStatus,
-    lemonSqueezyCustomerPortalUrl: null,
     paymentProcessorUserId: hasUserPaidOnStripe
       ? `cus_test_${faker.string.uuid()}`
       : null,

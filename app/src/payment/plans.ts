@@ -11,6 +11,9 @@ export enum PaymentPlanId {
   Hobby = "hobby",
   Pro = "pro",
   Credits10 = "credits10",
+  Credits50 = "credits50",
+  Credits100 = "credits100",
+  Credits200 = "credits200",
 }
 
 export interface PaymentPlan {
@@ -43,6 +46,21 @@ export const paymentPlans = {
       requireNodeEnvVar("PAYMENTS_CREDITS_10_PLAN_ID"),
     effect: { kind: "credits", amount: 10 },
   },
+  [PaymentPlanId.Credits50]: {
+    getPaymentProcessorPlanId: () =>
+      requireNodeEnvVar("PAYMENTS_CREDITS_50_PLAN_ID"),
+    effect: { kind: "credits", amount: 55 }, // 50元充值，赠送10%
+  },
+  [PaymentPlanId.Credits100]: {
+    getPaymentProcessorPlanId: () =>
+      requireNodeEnvVar("PAYMENTS_CREDITS_100_PLAN_ID"),
+    effect: { kind: "credits", amount: 115 }, // 100元充值，赠送15%
+  },
+  [PaymentPlanId.Credits200]: {
+    getPaymentProcessorPlanId: () =>
+      requireNodeEnvVar("PAYMENTS_CREDITS_200_PLAN_ID"),
+    effect: { kind: "credits", amount: 240 }, // 200元充值，赠送20%
+  },
 } as const satisfies Record<PaymentPlanId, PaymentPlan>;
 
 export function prettyPaymentPlanName(planId: PaymentPlanId): string {
@@ -50,6 +68,9 @@ export function prettyPaymentPlanName(planId: PaymentPlanId): string {
     [PaymentPlanId.Hobby]: "Hobby",
     [PaymentPlanId.Pro]: "Pro",
     [PaymentPlanId.Credits10]: "10 Credits",
+    [PaymentPlanId.Credits50]: "55 Credits",
+    [PaymentPlanId.Credits100]: "115 Credits",
+    [PaymentPlanId.Credits200]: "240 Credits",
   };
   return planToName[planId];
 }

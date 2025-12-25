@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "credits" SET DATA TYPE DECIMAL(10,2);

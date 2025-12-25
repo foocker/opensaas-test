@@ -11,6 +11,7 @@ import type {
 } from "wasp/server/operations";
 import * as z from "zod";
 import { SubscriptionStatus } from "../payment/plans";
+import { getModelCreditCost, hasEnoughCredits } from "../payment/creditPricing";
 import { ensureArgsSchemaOrThrowHttpError } from "../server/validation";
 import { chatCompletion, imageGeneration } from "./aiProvider";
 import { GeneratedSchedule, TaskPriority } from "./schedule";
@@ -72,7 +73,8 @@ export const generateGptResponse: GenerateGptResponse<
   //
   // Think about which option you prefer for your app and edit the code accordingly.
   if (!isUserSubscribed(context.user)) {
-    if (context.user.credits > 0) {
+    const currentCredits = Number(context.user.credits);
+    if (currentCredits > 0) {
       const decrementCredit = context.entities.User.update({
         where: { id: context.user.id },
         data: {
@@ -364,22 +366,39 @@ export const generateImage = async (
     });
 
     // Decrement credits for users without an active subscription
+    // Credit cost is dynamically calculated based on provider and model
     if (!isUserSubscribed(context.user)) {
-      if (context.user.credits > 0) {
+      const creditCost = getModelCreditCost(result.provider, result.model);
+
+      console.log("Credit deduction info:", {
+        provider: result.provider,
+        model: result.model,
+        creditCost,
+        userCredits: context.user.credits,
+      });
+
+      if (creditCost > 0) {
+        // Check if user has enough credits
+        if (!hasEnoughCredits(Number(context.user.credits), result.provider, result.model)) {
+          throw new HttpError(
+            402,
+            `Insufficient credits. Required: ${creditCost}, Available: ${context.user.credits}`
+          );
+        }
+
+        // Deduct credits
         await context.entities.User.update({
           where: { id: context.user.id },
           data: {
             credits: {
-              decrement: 1,
+              decrement: creditCost,
             },
           },
         });
-        console.log("Credits decremented");
+
+        console.log(`Credits decremented by ${creditCost} for ${result.provider}/${result.model}`);
       } else {
-        throw new HttpError(
-          402,
-          "User has no subscription and is out of credits"
-        );
+        console.log(`No credit cost for ${result.provider}/${result.model} - free tier`);
       }
     }
 

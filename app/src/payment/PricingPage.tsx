@@ -2,6 +2,7 @@ import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "wasp/client/auth";
+import { generateCheckoutSession } from "wasp/client/operations";
 import { Alert, AlertDescription } from "../client/components/ui/alert";
 import { Button } from "../client/components/ui/button";
 import {
@@ -11,13 +12,42 @@ import {
   CardTitle,
 } from "../client/components/ui/card";
 import { cn } from "../client/utils";
+import { PaymentPlanId, paymentPlans } from "./plans";
 
-// 充值套餐选项
+// 充值套餐选项 - 映射到 Stripe Price ID (通过 PaymentPlanId)
 const rechargeOptions = [
-  { amount: 9.9, label: "¥9.9", description: "入门充值", popular: false },
-  { amount: 50, label: "¥50", description: "推荐充值", popular: true },
-  { amount: 100, label: "¥100", description: "超值充值", popular: false },
-  { amount: 200, label: "¥200", description: "大额充值", popular: false },
+  {
+    planId: PaymentPlanId.Credits10,
+    amount: 9.9,
+    label: "¥9.9",
+    description: "入门充值",
+    popular: false,
+    credits: (paymentPlans[PaymentPlanId.Credits10].effect as any).amount,
+  },
+  {
+    planId: PaymentPlanId.Credits50,
+    amount: 50,
+    label: "¥50",
+    description: "推荐充值",
+    popular: true,
+    credits: (paymentPlans[PaymentPlanId.Credits50].effect as any).amount,
+  },
+  {
+    planId: PaymentPlanId.Credits100,
+    amount: 100,
+    label: "¥100",
+    description: "超值充值",
+    popular: false,
+    credits: (paymentPlans[PaymentPlanId.Credits100].effect as any).amount,
+  },
+  {
+    planId: PaymentPlanId.Credits200,
+    amount: 200,
+    label: "¥200",
+    description: "大额充值",
+    popular: false,
+    credits: (paymentPlans[PaymentPlanId.Credits200].effect as any).amount,
+  },
 ];
 
 const PricingPage = () => {
@@ -27,16 +57,34 @@ const PricingPage = () => {
   const { data: user } = useAuth();
   const navigate = useNavigate();
 
-  async function handleRechargeClick(amount: number) {
+  async function handleRechargeClick(planId: PaymentPlanId) {
     if (!user) {
       navigate("/login");
       return;
     }
 
-    // TODO: 实现充值逻辑
-    // 这里将来会调用支付宝充值接口
-    console.log(`Recharge amount: ${amount}`);
-    setErrorMessage("充值功能即将上线！");
+    try {
+      setIsPaymentLoading(true);
+      setErrorMessage(null);
+
+      // 调用 Stripe Checkout
+      const checkoutResults = await generateCheckoutSession(planId);
+
+      if (checkoutResults?.sessionUrl) {
+        // 跳转到 Stripe 支付页面
+        window.open(checkoutResults.sessionUrl, "_self");
+      } else {
+        throw new Error("无法生成支付链接");
+      }
+    } catch (error: unknown) {
+      console.error("Payment error:", error);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("支付处理失败，请稍后重试");
+      }
+      setIsPaymentLoading(false);
+    }
   }
 
   return (
@@ -63,7 +111,7 @@ const PricingPage = () => {
         <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4 lg:gap-x-8">
           {rechargeOptions.map((option) => (
             <Card
-              key={option.amount}
+              key={option.planId}
               className={cn(
                 "relative flex grow flex-col justify-between overflow-hidden transition-all duration-300 hover:shadow-lg",
                 {
@@ -113,7 +161,7 @@ const PricingPage = () => {
                       className="text-primary h-5 w-5 flex-none"
                       aria-hidden="true"
                     />
-                    一次性充值 {option.amount} 元
+                    获得 {option.credits} 积分
                   </li>
                   <li className="flex gap-x-3">
                     <CheckCircle
@@ -129,12 +177,23 @@ const PricingPage = () => {
                     />
                     无使用期限
                   </li>
+                  {option.credits > option.amount && (
+                    <li className="flex gap-x-3">
+                      <CheckCircle
+                        className="text-primary h-5 w-5 flex-none"
+                        aria-hidden="true"
+                      />
+                      <span className="text-primary font-semibold">
+                        额外赠送 {option.credits - option.amount} 积分
+                      </span>
+                    </li>
+                  )}
                 </ul>
               </CardContent>
 
               <CardFooter>
                 <Button
-                  onClick={() => handleRechargeClick(option.amount)}
+                  onClick={() => handleRechargeClick(option.planId)}
                   variant={option.popular ? "default" : "outline"}
                   className="w-full"
                   disabled={isPaymentLoading}
@@ -157,7 +216,7 @@ const PricingPage = () => {
               <div>
                 <p className="text-foreground font-semibold">按需付费</p>
                 <p className="text-muted-foreground text-sm">
-                  每次 AI 调用前实时扣费，Token 按市场价的 30% 计费
+                  每次 AI 调用实时扣费，1 积分 ≈ 1 元的 AI 服务
                 </p>
               </div>
             </div>
@@ -166,7 +225,7 @@ const PricingPage = () => {
               <div>
                 <p className="text-foreground font-semibold">余额透明</p>
                 <p className="text-muted-foreground text-sm">
-                  在用户中心随时查看钱包余额和消费记录
+                  在用户中心随时查看积分余额和消费记录
                 </p>
               </div>
             </div>
@@ -175,7 +234,16 @@ const PricingPage = () => {
               <div>
                 <p className="text-foreground font-semibold">余额预警</p>
                 <p className="text-muted-foreground text-sm">
-                  余额低于 10 元时自动提醒，避免服务中断
+                  余额低于 10 积分时自动提醒，避免服务中断
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-primary h-5 w-5 flex-none mt-0.5" />
+              <div>
+                <p className="text-foreground font-semibold">充值优惠</p>
+                <p className="text-muted-foreground text-sm">
+                  充值金额越大，赠送积分越多（最高赠送 20%）
                 </p>
               </div>
             </div>

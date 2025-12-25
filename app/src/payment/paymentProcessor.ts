@@ -18,7 +18,7 @@ export interface FetchCustomerPortalUrlArgs {
 }
 
 export interface PaymentProcessor {
-  id: "stripe" | "lemonsqueezy" | "polar";
+  id: "stripe";
   createCheckoutSession: (
     args: CreateCheckoutSessionArgs,
   ) => Promise<{ session: { id: string; url: string } }>;
@@ -30,9 +30,6 @@ export interface PaymentProcessor {
 }
 
 /**
- * Choose which payment processor you'd like to use, then delete the
- * other payment processor code that you're not using  from `/src/payment`
+ * 使用 Stripe 作为支付处理器
  */
 export const paymentProcessor: PaymentProcessor = stripePaymentProcessor;
-// export const paymentProcessor: PaymentProcessor = lemonSqueezyPaymentProcessor;
-// export const paymentProcessor: PaymentProcessor = polarPaymentProcessor;
