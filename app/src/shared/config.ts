@@ -77,14 +77,16 @@ export const FeatureFlags = {
     alipay: false,         // 支付宝（待实现）
   },
 
-  // AI 功能
+  // AI 功能模块（通过配置控制显示与否）
   ai: {
-    scheduler: true,       // AI 日程规划
+    scheduler: false,       // AI 日程规划（AI Day Scheduler）
+    imageGenerator: true,  // AI 图像生成（Banana Playground）
+    textGenerator: false,  // AI 文本生成（待实现）
     // 后续可以添加更多 AI 功能
   },
 
   // 其他功能
-  fileUpload: false,       // 文件上传功能
+  fileUpload: true,       // 文件上传功能
   analytics: true,         // Google Analytics
 } as const;
 

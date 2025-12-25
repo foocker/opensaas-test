@@ -1,5 +1,5 @@
 import { ChevronDown, LogOut, User } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { logout } from "wasp/client/auth";
 import { Link as WaspRouterLink } from "wasp/client/router";
 import { type User as UserEntity } from "wasp/entities";
@@ -9,10 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../client/components/ui/dropdown-menu";
-import { userMenuItems } from "./constants";
+import { getUserMenuItems } from "./constants";
 
 export function UserDropdown({ user }: { user: Partial<UserEntity> }) {
   const [open, setOpen] = useState(false);
+
+  // 动态生成菜单项（根据用户登录状态和权限）
+  const menuItems = useMemo(() => {
+    const isAuthenticated = !!user;
+    const isAdmin = user?.isAdmin || false;
+    return getUserMenuItems(isAuthenticated, isAdmin);
+  }, [user]);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -26,7 +33,7 @@ export function UserDropdown({ user }: { user: Partial<UserEntity> }) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {userMenuItems.map((item) => {
+        {menuItems.map((item) => {
           if (item.isAuthRequired && !user) return null;
           if (item.isAdminOnly && (!user || !user.isAdmin)) return null;
 

@@ -1,8 +1,9 @@
 import { LogOut } from "lucide-react";
+import { useMemo } from "react";
 import { logout } from "wasp/client/auth";
 import { Link as WaspRouterLink } from "wasp/client/router";
 import { type User } from "wasp/entities";
-import { userMenuItems } from "./constants";
+import { getUserMenuItems } from "./constants";
 
 export const UserMenuItems = ({
   user,
@@ -11,9 +12,16 @@ export const UserMenuItems = ({
   user?: Partial<User>;
   onItemClick?: () => void;
 }) => {
+  // 动态生成菜单项（根据用户登录状态和权限）
+  const menuItems = useMemo(() => {
+    const isAuthenticated = !!user;
+    const isAdmin = user?.isAdmin || false;
+    return getUserMenuItems(isAuthenticated, isAdmin);
+  }, [user]);
+
   return (
     <>
-      {userMenuItems.map((item) => {
+      {menuItems.map((item) => {
         if (item.isAuthRequired && !user) return null;
         if (item.isAdminOnly && (!user || !user.isAdmin)) return null;
 
