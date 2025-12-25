@@ -10,28 +10,48 @@ app NanoBananaMagic {
   },
 
   head: [
+    // 📱 Favicon 和基础 Meta 标签
     "<link rel='icon' href='/favicon.ico' />",
     "<meta charset='utf-8' />",
-    "<meta name='description' content='比Google AI便宜70%的AI服务平台，按需付费，灵活使用' />",
-    "<meta name='author' content='Nano Banana Magic' />",
-    "<meta name='keywords' content='AI, 人工智能, API, OpenAI, Gemini, 便宜, 按量付费' />",
+    "<meta name='viewport' content='width=device-width, initial-scale=1' />",
 
+    // 🔍 SEO 基础标签
+    "<meta name='description' content='比Google AI便宜70%的AI服务平台，支持Gemini、Claude等多种模型，按需付费，灵活使用。AI图像生成、文本生成一站式解决方案。' />",
+    "<meta name='author' content='Nano Banana Magic' />",
+    "<meta name='keywords' content='AI API, 人工智能服务, Gemini API, Claude API, OpenAI替代, AI图像生成, 便宜AI, 按量付费, 积分充值' />",
+    "<meta name='robots' content='index, follow' />",
+    "<link rel='canonical' href='https://nbartai.com' />",
+
+    // 📱 Open Graph (Facebook, LinkedIn等社交平台)
     "<meta property='og:type' content='website' />",
-    "<meta property='og:title' content='Nano Banana Magic - AI服务平台' />",
+    "<meta property='og:title' content='Nano Banana Magic - 比Google AI便宜70%的AI服务平台' />",
     "<meta property='og:site_name' content='Nano Banana Magic' />",
     "<meta property='og:url' content='https://nbartai.com' />",
-    "<meta property='og:description' content='比Google AI便宜70%的AI服务平台，按需付费，灵活使用' />",
+    "<meta property='og:description' content='支持Gemini、Claude等多种AI模型，按需付费，灵活使用。AI图像生成、文本生成一站式解决方案。' />",
     "<meta property='og:image' content='https://nbartai.com/public-banner.webp' />",
-    "<meta name='twitter:image' content='https://nbartai.com/public-banner.webp' />",
-    "<meta name='twitter:image:width' content='800' />",
-    "<meta name='twitter:image:height' content='400' />",
+    "<meta property='og:image:width' content='1200' />",
+    "<meta property='og:image:height' content='630' />",
+    "<meta property='og:locale' content='zh_CN' />",
+
+    // 🐦 Twitter Card
     "<meta name='twitter:card' content='summary_large_image' />",
-    // TODO: You can put your Plausible analytics scripts below (https://docs.opensaas.sh/guides/analytics/):
-    // NOTE: Plausible does not use Cookies, so you can simply add the scripts here.
-    // Google, on the other hand, does, so you must instead add the script dynamically
-    // via the Cookie Consent component after the user clicks the "Accept" cookies button.
-    "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.js'></script>",  // for production
-    "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.local.js'></script>",  // for development
+    "<meta name='twitter:title' content='Nano Banana Magic - 比Google AI便宜70%的AI服务平台' />",
+    "<meta name='twitter:description' content='支持Gemini、Claude等多种AI模型，按需付费，灵活使用。' />",
+    "<meta name='twitter:image' content='https://nbartai.com/public-banner.webp' />",
+
+    // 🏢 结构化数据 (Schema.org) - Organization
+    "<script type='application/ld+json'>{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Nano Banana Magic\",\"url\":\"https://nbartai.com\",\"logo\":\"https://nbartai.com/logo.webp\",\"description\":\"比Google AI便宜70%的AI服务平台\",\"sameAs\":[\"https://github.com/yourusername\",\"https://twitter.com/yourusername\"]}</script>",
+
+    // 🌐 结构化数据 (Schema.org) - WebSite
+    "<script type='application/ld+json'>{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Nano Banana Magic\",\"url\":\"https://nbartai.com\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":\"https://nbartai.com/search?q={search_term_string}\",\"query-input\":\"required name=search_term_string\"}}</script>",
+
+    // 💼 结构化数据 (Schema.org) - Product/Service
+    "<script type='application/ld+json'>{\"@context\":\"https://schema.org\",\"@type\":\"Product\",\"name\":\"Nano Banana Magic AI 服务\",\"description\":\"提供 Gemini、Claude 等多种 AI 模型 API 服务，比 Google 官方便宜 70%\",\"brand\":{\"@type\":\"Brand\",\"name\":\"Nano Banana Magic\"},\"offers\":{\"@type\":\"AggregateOffer\",\"priceCurrency\":\"CNY\",\"lowPrice\":\"9.99\",\"highPrice\":\"199.99\",\"offerCount\":\"4\"}}</script>",
+
+    // 📊 Analytics（可选 - Plausible 不使用 Cookies）
+    // TODO: 如果使用 Plausible Analytics，取消下面两行的注释并填入你的 site-id
+    // "<script defer data-domain='nbartai.com' src='https://plausible.io/js/script.js'></script>",  // for production
+    // "<script defer data-domain='localhost' src='https://plausible.io/js/script.local.js'></script>",  // for development
   ],
 
   // 🔐 Auth out of the box! https://wasp.sh/docs/auth/overview
