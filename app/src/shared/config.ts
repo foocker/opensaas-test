@@ -28,7 +28,7 @@ export const NavigationConfig = {
     features: false,     // 功能介绍（目前配置是去掉）
     pricing: true,       // 定价页面
     documentation: false, // 文档（外部链接）
-    blog: true,         // 博客（外部链接）
+    blog: false,         // 博客（外部链接）
   },
 
   // 启用的 Demo 功能导航项
@@ -36,7 +36,7 @@ export const NavigationConfig = {
     aiScheduler: true,   // AI 日程规划
     fileUpload: false,   // 文件上传（可以关闭不需要的功能）
     documentation: false,
-    blog: true,
+    blog: false,
   },
 } as const;
 
@@ -60,16 +60,20 @@ export const NavigationConfig = {
 //
 export const ExternalLinks = {
   // ==================== 顶部导航链接 ====================
-  documentation: "https://docs.opensaas.sh",  // 外部文档站
+  // documentation: "https://docs.opensaas.sh",  // 外部文档站
+  // github: "https://github.com/foocker/opensaas-test",
+  // blog: "https://docs.opensaas.sh/blog",      // 外部博客
+
+  documentation: "#",  // 外部文档站
   github: "https://github.com/foocker/opensaas-test",
-  blog: "https://docs.opensaas.sh/blog",      // 外部博客
+  blog: "#",      // 外部博客
 
   // ==================== Footer 链接配置 ====================
   footer: {
     // --- App 区块 ---
     // 如果你的文档/博客是独立部署的，使用外链
-    documentationFooter: "https://docs.opensaas.sh",
-    blogFooter: "https://docs.opensaas.sh/blog",
+    documentationFooter: "#",
+    blogFooter: "#",
 
     // --- Company 区块 ---
     // 推荐使用内部路由（需要在 main.wasp 中定义页面）
@@ -84,6 +88,20 @@ export const ExternalLinks = {
 
     // ❌ 不推荐: 外链到自己的域名（会导致页面重新加载）
     // about: "https://nbartai.com/about",
+  },
+
+  // ==================== 社交媒体链接配置 ====================
+  social: {
+    twitter: "#",  // Twitter/X 链接（填入你的 Twitter 主页，如 "https://twitter.com/yourhandle"）
+    github: "https://github.com/foocker/opensaas-test",  // GitHub 仓库链接
+    discord: "#",  // Discord 社区链接（如果有）
+    youtube: "#",  // YouTube 频道链接（如果有）
+
+    // 其他可用的社交媒体平台（按需取消注释并填入链接）:
+    // linkedin: "https://www.linkedin.com/company/yourcompany",
+    // facebook: "https://www.facebook.com/yourpage",
+    // instagram: "https://www.instagram.com/yourhandle",
+    // tiktok: "https://www.tiktok.com/@yourhandle",
   },
 } as const;
 

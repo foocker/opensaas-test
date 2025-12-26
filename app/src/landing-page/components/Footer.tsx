@@ -1,6 +1,14 @@
+import React from "react";
+
 interface NavigationItem {
   name: string;
   href: string;
+}
+
+interface SocialItem {
+  name: string;
+  href: string;
+  icon: (props: any) => React.ReactElement;
 }
 
 export default function Footer({
@@ -9,6 +17,7 @@ export default function Footer({
   footerNavigation: {
     app: NavigationItem[];
     company: NavigationItem[];
+    social: SocialItem[];
   };
 }) {
   return (
@@ -50,6 +59,24 @@ export default function Footer({
                     className="text-sm leading-6 text-gray-600 hover:text-gray-900 dark:text-white"
                   >
                     {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+              Connect
+            </h3>
+            <ul role="list" className="mt-6 space-y-4">
+              {footerNavigation.social.map((item) => (
+                <li key={item.name}>
+                  <a
+                    href={item.href}
+                    className="flex items-center gap-3 text-sm leading-6 text-gray-600 hover:text-gray-900 dark:text-white"
+                  >
+                    <item.icon className="h-5 w-5" aria-hidden="true" />
+                    <span>{item.name}</span>
                   </a>
                 </li>
               ))}

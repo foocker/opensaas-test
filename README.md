@@ -54,6 +54,7 @@ opensaas-test/
 
 | 文档 | 说明 |
 |------|------|
+| [BRAND_ASSETS_GUIDE.md](./docs/BRAND_ASSETS_GUIDE.md) | **品牌资源管理** - Logo、图片集中管理和替换 |
 | [CONFIGURATION_GUIDE.md](./docs/CONFIGURATION_GUIDE.md) | 配置系统指南 |
 | [CONFIG_GUIDE.md](./docs/CONFIG_GUIDE.md) | Landing Page 配置 |
 | [COMPONENTS_MAPPING.md](./docs/COMPONENTS_MAPPING.md) | 组件映射说明 |

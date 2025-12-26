@@ -12,3 +12,11 @@ export const FooterLinks = {
   privacy: ExternalLinks.footer.privacy,
   terms: ExternalLinks.footer.terms,
 };
+
+// 社交媒体链接
+export const SocialLinks = {
+  twitter: ExternalLinks.social.twitter,
+  github: ExternalLinks.social.github,
+  discord: ExternalLinks.social.discord,
+  youtube: ExternalLinks.social.youtube,
+};

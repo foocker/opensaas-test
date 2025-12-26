@@ -1,0 +1,8 @@
+# 图片资源管理工具依赖
+# Image Asset Management Tool Dependencies
+
+# 核心图片处理库
+Pillow>=10.0.0
+
+# PNG to SVG 转换（可选，需要系统安装 potrace）
+# cairosvg>=2.7.0  # 备用方案
