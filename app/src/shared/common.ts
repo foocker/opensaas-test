@@ -1,2 +1,14 @@
-export const DocsUrl = "https://docs.opensaas.sh";
-export const BlogUrl = "https://docs.opensaas.sh/blog";
+import { ExternalLinks } from "./config";
+
+// 从 config.ts 导出链接，保持向后兼容
+export const DocsUrl = ExternalLinks.documentation;
+export const BlogUrl = ExternalLinks.blog;
+
+// Footer 链接
+export const FooterLinks = {
+  documentation: ExternalLinks.footer.documentationFooter,
+  blog: ExternalLinks.footer.blogFooter,
+  about: ExternalLinks.footer.about,
+  privacy: ExternalLinks.footer.privacy,
+  terms: ExternalLinks.footer.terms,
+};

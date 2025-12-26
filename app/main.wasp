@@ -37,6 +37,7 @@ app NanoBananaMagic {
     "<meta name='twitter:card' content='summary_large_image' />",
     "<meta name='twitter:title' content='Nano Banana Magic - 比Google AI便宜70%的AI服务平台' />",
     "<meta name='twitter:description' content='支持Gemini、Claude等多种AI模型，按需付费，灵活使用。' />",
+
     "<meta name='twitter:image' content='https://nbartai.com/public-banner.webp' />",
 
     // 🏢 结构化数据 (Schema.org) - Organization
@@ -329,6 +330,23 @@ page AdminUIButtonsPage {
 route NotFoundRoute { path: "*", to: NotFoundPage }
 page NotFoundPage {
   component: import { NotFoundPage } from "@src/client/components/NotFoundPage"
+}
+//#endregion
+
+//#region Legal Pages
+route AboutRoute { path: "/about", to: AboutPage }
+page AboutPage {
+  component: import About from "@src/legal/AboutPage"
+}
+
+route PrivacyRoute { path: "/privacy", to: PrivacyPage }
+page PrivacyPage {
+  component: import Privacy from "@src/legal/PrivacyPage"
+}
+
+route TermsRoute { path: "/terms", to: TermsPage }
+page TermsPage {
+  component: import Terms from "@src/legal/TermsPage"
 }
 //#endregion
 

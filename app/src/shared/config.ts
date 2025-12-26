@@ -28,7 +28,7 @@ export const NavigationConfig = {
     features: false,     // 功能介绍（目前配置是去掉）
     pricing: true,       // 定价页面
     documentation: false, // 文档（外部链接）
-    blog: false,         // 博客（外部链接）
+    blog: true,         // 博客（外部链接）
   },
 
   // 启用的 Demo 功能导航项
@@ -36,15 +36,55 @@ export const NavigationConfig = {
     aiScheduler: true,   // AI 日程规划
     fileUpload: false,   // 文件上传（可以关闭不需要的功能）
     documentation: false,
-    blog: false,
+    blog: true,
   },
 } as const;
 
 // ==================== 外部链接配置 ====================
+//
+// 链接类型说明：
+// 1. 内部路由（推荐）: "/about"
+//    - 用于同一个 Wasp 应用内的页面
+//    - 单页应用 (SPA) 导航，不重新加载
+//    - 需要在 main.wasp 中定义对应的路由和页面
+//
+// 2. 外部链接: "https://example.com"
+//    - 用于独立部署的服务（如独立的博客、文档站）
+//    - 用于其他网站（如 GitHub、Twitter）
+//    - 浏览器会完全重新加载页面
+//
+// 3. 占位符: "#"
+//    - 点击后不跳转，停留在当前页面
+//    - 仅用于页面未开发时的临时占位
+//    - 开发完成后应改为内部路由或外部链接
+//
 export const ExternalLinks = {
-  documentation: "https://docs.opensaas.sh",
-  blog: "https://docs.opensaas.sh/blog",
-  github: "https://github.com/wasp-lang/wasp",
+  // ==================== 顶部导航链接 ====================
+  documentation: "https://docs.opensaas.sh",  // 外部文档站
+  github: "https://github.com/foocker/opensaas-test",
+  blog: "https://docs.opensaas.sh/blog",      // 外部博客
+
+  // ==================== Footer 链接配置 ====================
+  footer: {
+    // --- App 区块 ---
+    // 如果你的文档/博客是独立部署的，使用外链
+    documentationFooter: "https://docs.opensaas.sh",
+    blogFooter: "https://docs.opensaas.sh/blog",
+
+    // --- Company 区块 ---
+    // 推荐使用内部路由（需要在 main.wasp 中定义页面）
+    about: "/about",      // 内部路由 - 关于我们页面
+    privacy: "/privacy",  // 内部路由 - 隐私政策页面
+    terms: "/terms",      // 内部路由 - 服务条款页面
+
+    // 如果页面未开发，可以暂时使用占位符:
+    // about: "#",    // 占位符 - 点击不跳转
+    // privacy: "#",
+    // terms: "#",
+
+    // ❌ 不推荐: 外链到自己的域名（会导致页面重新加载）
+    // about: "https://nbartai.com/about",
+  },
 } as const;
 
 // ==================== 功能开关配置 ====================

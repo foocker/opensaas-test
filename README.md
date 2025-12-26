@@ -33,6 +33,8 @@ opensaas-test/
 | 文档 | 说明 |
 |------|------|
 | [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | **完整架构设计** - 系统概览、开发流程 |
+| [PROJECT_STRUCTURE_AND_STRATEGY.md](./docs/PROJECT_STRUCTURE_AND_STRATEGY.md) | **项目结构与开发策略** - 目录结构、组件分层、Wasp 开发策略 |
+| [BACKEND_DEVELOPMENT_GUIDE.md](./docs/BACKEND_DEVELOPMENT_GUIDE.md) | **后端开发指南** - Query/Action、数据库操作、错误处理 |
 | [GOOGLE_ANALYTICS_SETUP.md](./docs/GOOGLE_ANALYTICS_SETUP.md) | Google Analytics 配置指南 |
 | [SEO_GUIDE.md](./docs/SEO_GUIDE.md) | SEO 优化完整指南 |
 | [AI_API_GUIDE.md](./docs/AI_API_GUIDE.md) | AI API 使用文档 |

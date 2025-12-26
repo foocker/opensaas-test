@@ -6,7 +6,7 @@ import promptpanda from "../client/static/examples/promptpanda.webp";
 import reviewradar from "../client/static/examples/reviewradar.webp";
 import scribeist from "../client/static/examples/scribeist.webp";
 import searchcraft from "../client/static/examples/searchcraft.webp";
-import { BlogUrl, DocsUrl } from "../shared/common";
+import { DocsUrl, FooterLinks } from "../shared/common";
 import type { GridFeature } from "./components/FeaturesGrid";
 
 export const features: GridFeature[] = [
@@ -128,13 +128,13 @@ export const faqs = [
 
 export const footerNavigation = {
   app: [
-    { name: "Documentation", href: DocsUrl },
-    { name: "Blog", href: BlogUrl },
+    { name: "Documentation", href: FooterLinks.documentation },
+    { name: "Blog", href: FooterLinks.blog },
   ],
   company: [
-    { name: "About", href: "https://wasp.sh" },
-    { name: "Privacy", href: "#" },
-    { name: "Terms of Service", href: "#" },
+    { name: "About", href: FooterLinks.about },
+    { name: "Privacy", href: FooterLinks.privacy },
+    { name: "Terms of Service", href: FooterLinks.terms },
   ],
 };
 
