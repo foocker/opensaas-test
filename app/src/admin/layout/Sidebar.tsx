@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import Logo from "../../client/static/logo.webp";
+import { BrandAssets } from "../../shared/assets";
 import { cn } from "../../client/utils";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 
@@ -80,7 +80,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="py-5.5 lg:py-6.5 flex items-center justify-between gap-2 px-6">
         <NavLink to="/">
-          <img src={Logo} alt="Logo" width={50} />
+          <img src={BrandAssets.logo} alt={BrandAssets.logoAlt} width={50} />
         </NavLink>
 
         <button

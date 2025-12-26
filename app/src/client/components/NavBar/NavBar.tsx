@@ -14,7 +14,7 @@ import { SiteConfig } from "../../../shared/config";
 import { throttleWithTrailingInvocation } from "../../../shared/utils";
 import { UserDropdown } from "../../../user/UserDropdown";
 import { UserMenuItems } from "../../../user/UserMenuItems";
-import logo from "../../static/logo.webp";
+import { BrandAssets } from "../../../shared/assets";
 import { cn } from "../../utils";
 import DarkModeSwitcher from "../DarkModeSwitcher";
 
@@ -248,7 +248,7 @@ const NavLogo = ({ isScrolled }: { isScrolled: boolean }) => (
       "size-8": !isScrolled,
       "size-7": isScrolled,
     })}
-    src={logo}
-    alt={SiteConfig.logoAlt}
+    src={BrandAssets.logo}
+    alt={BrandAssets.logoAlt}
   />
 );

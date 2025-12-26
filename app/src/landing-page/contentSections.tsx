@@ -1,11 +1,4 @@
-import daBoiAvatar from "../client/static/da-boi.webp";
-import kivo from "../client/static/examples/kivo.webp";
-import messync from "../client/static/examples/messync.webp";
-import microinfluencerClub from "../client/static/examples/microinfluencers.webp";
-import promptpanda from "../client/static/examples/promptpanda.webp";
-import reviewradar from "../client/static/examples/reviewradar.webp";
-import scribeist from "../client/static/examples/scribeist.webp";
-import searchcraft from "../client/static/examples/searchcraft.webp";
+import { MiscAssets, ExampleAssets } from "../shared/assets";
 import { DocsUrl, FooterLinks, SocialLinks } from "../shared/common";
 import type { GridFeature } from "./components/FeaturesGrid";
 
@@ -79,21 +72,21 @@ export const testimonials = [
   {
     name: "Da Boi",
     role: "Wasp Mascot",
-    avatarSrc: daBoiAvatar,
+    avatarSrc: MiscAssets.daBoi,
     socialUrl: "https://twitter.com/wasplang",
     quote: "I don't even know how to code. I'm just a plushie.",
   },
   {
     name: "Mr. Foobar",
     role: "Founder @ Cool Startup",
-    avatarSrc: daBoiAvatar,
+    avatarSrc: MiscAssets.daBoi,
     socialUrl: "",
     quote: "This product makes me cooler than I already am.",
   },
   {
     name: "Jamie",
     role: "Happy Customer",
-    avatarSrc: daBoiAvatar,
+    avatarSrc: MiscAssets.daBoi,
     socialUrl: "#",
     quote: "My cats love it!",
   },
@@ -188,43 +181,43 @@ export const examples = [
   {
     name: "Example #1",
     description: "Describe your example here.",
-    imageSrc: kivo,
+    imageSrc: ExampleAssets.example1,
     href: "#",
   },
   {
     name: "Example #2",
     description: "Describe your example here.",
-    imageSrc: messync,
+    imageSrc: ExampleAssets.example2,
     href: "#",
   },
   {
     name: "Example #3",
     description: "Describe your example here.",
-    imageSrc: microinfluencerClub,
+    imageSrc: ExampleAssets.example3,
     href: "#",
   },
   {
     name: "Example #4",
     description: "Describe your example here.",
-    imageSrc: promptpanda,
+    imageSrc: ExampleAssets.example4,
     href: "#",
   },
   {
     name: "Example #5",
     description: "Describe your example here.",
-    imageSrc: reviewradar,
+    imageSrc: ExampleAssets.example5,
     href: "#",
   },
   {
     name: "Example #6",
     description: "Describe your example here.",
-    imageSrc: scribeist,
+    imageSrc: ExampleAssets.example6,
     href: "#",
   },
   {
     name: "Example #7",
     description: "Describe your example here.",
-    imageSrc: searchcraft,
+    imageSrc: ExampleAssets.example7,
     href: "#",
   },
 ];

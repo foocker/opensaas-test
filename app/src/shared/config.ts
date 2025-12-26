@@ -3,6 +3,8 @@
  * 通过修改这个文件来快速定制你的 SaaS 应用
  */
 
+import { fa } from "@faker-js/faker";
+
 // ==================== 品牌配置 ====================
 export const SiteConfig = {
   // 网站名称（显示在导航栏、页脚等位置）
@@ -116,7 +118,7 @@ export const FeatureFlags = {
     showExamples: false,          // 示例轮播（展示使用案例）
     showClients: false,          // 客户/技术栈 Logo 展示（Used by）
     showHighlightedFeature: false, // 突出功能展示（大图 + 文字说明）
-    showFeatures: false,         // 传统列表式功能展示（2列布局）
+    showFeatures: false,         // 传统列表式功能展示（2列布局） 似乎没效果 TODO 
     showFeaturesGrid: false,      // Bento 风格功能网格（推荐使用）
     showTestimonials: false,      // 用户评价（What Our Users Say）
     showFAQ: false,               // 常见问题（手风琴式展开）

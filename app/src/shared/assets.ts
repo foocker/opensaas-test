@@ -1,53 +1,99 @@
 /**
- * 资源配置文件 - 集中管理公共图片路径
+ * 资源配置文件 - 集中管理公共图片 imports
  *
  * 🎯 为什么需要这个文件？
- * 1. 集中管理 - 品牌相关的图片路径在一个地方
+ * 1. 集中管理 - 品牌相关的图片 import 在一个地方
  * 2. 易于替换 - 修改品牌图片只需改这里
  * 3. 类型安全 - TypeScript 自动补全和检查
- * 4. 避免错误 - 拼写错误会被立即发现
+ * 4. Vite 优化 - 使用 import 让 Vite 处理资源（hash、压缩等）
  *
  * 📝 管理原则：
  * ✅ 管理：品牌 Logo、Banner、Favicon 等公共资源
  * ❌ 不管理：业务相关的动态内容（AI 模板、用户上传等）
  *
  * 📝 使用方法：
- * import { BrandAssets, FeatureAssets } from "@src/shared/assets";
- * <img src={BrandAssets.logo} alt="Logo" />
+ * import { BrandAssets } from "../../shared/assets";
+ * <img src={BrandAssets.logo} alt={BrandAssets.logoAlt} />
+ *
+ * ⚠️ 重要：Wasp 使用 Vite，必须使用 import 方式导入图片
  */
 
 // ==================== 品牌资源 ====================
-// 需要替换为你自己的品牌图片
+import logo from "../client/static/logo.webp";
+import openSaasBannerLight from "../client/static/open-saas-banner-light.svg";
+import openSaasBannerDark from "../client/static/open-saas-banner-dark.svg";
+import avatarPlaceholder from "../client/static/avatar-placeholder.webp";
+
+// ==================== 示例/案例资源 ====================
+import daBoiAvatar from "../client/static/da-boi.webp";
+import kivo from "../client/static/examples/kivo.webp";
+import messync from "../client/static/examples/messync.webp";
+import microinfluencerClub from "../client/static/examples/microinfluencers.webp";
+import promptpanda from "../client/static/examples/promptpanda.webp";
+import reviewradar from "../client/static/examples/reviewradar.webp";
+import scribeist from "../client/static/examples/scribeist.webp";
+import searchcraft from "../client/static/examples/searchcraft.webp";
+
+// ==================== 功能展示资源 ====================
+import aiReady from "../client/static/assets/aiready.webp";
+import aiReadyDark from "../client/static/assets/aiready-dark.webp";
+
+/**
+ * 品牌相关的图片资源
+ *
+ * ⚠️ 使用此模板时，请替换以下所有图片为你自己的品牌图片：
+ * 1. 将你的图片放到 app/src/client/static/ 目录
+ * 2. 修改上面的 import 语句指向你的图片
+ * 3. 修改 BrandAssets.logoAlt 为你的品牌名称
+ */
 export const BrandAssets = {
   // 🏢 Logo
-  logo: "/logo.webp",                              // 主 Logo（需要替换）
-  logoAlt: "Nano Banana Magic",                    // Logo alt 文字
+  logo: logo,                          // 主 Logo（⚠️ 需要替换）
+  logoAlt: "Nano Banana Magic",        // Logo alt 文字（⚠️ 需要修改为你的品牌名）
 
-  // 📱 Banner（用于 SEO、社交媒体分享）
-  bannerLight: "/open-saas-banner-light.svg",      // 浅色主题 Banner（需要替换）
-  bannerDark: "/open-saas-banner-dark.svg",        // 深色主题 Banner（需要替换）
-  publicBanner: "/public-banner.webp",             // 公开分享用的 Banner（需要替换）
+  // 📱 Banner（用于 Hero 区域展示）
+  bannerLight: openSaasBannerLight,    // 浅色主题 Banner（⚠️ 需要替换）
+  bannerDark: openSaasBannerDark,      // 深色主题 Banner（⚠️ 需要替换）
 
   // 👤 头像占位符
-  avatarPlaceholder: "/avatar-placeholder.webp",   // 用户头像占位符
+  avatarPlaceholder: avatarPlaceholder, // 用户头像默认图
 } as const;
 
 // ==================== 功能展示资源 ====================
-// OpenSaaS 模板的示例图片，可以替换为你自己的功能截图
+/**
+ * 功能展示图片资源
+ *
+ * 当前使用的功能展示：
+ * - aiReady/aiReadyDark: 在 ExampleHighlightedFeature.tsx 中使用
+ * - 显示条件: config.ts 中 FeatureFlags.landingPage.showHighlightedFeature = true
+ *
+ * 📝 如何添加新的功能展示图片：
+ * 1. 将截图放到 app/src/client/static/assets/ 目录
+ *    例如：my-feature.webp、my-feature-dark.webp
+ *
+ * 2. 在这里添加 import：
+ *    import myFeature from "../client/static/assets/my-feature.webp";
+ *    import myFeatureDark from "../client/static/assets/my-feature-dark.webp";
+ *
+ * 3. 添加到 FeatureAssets：
+ *    export const FeatureAssets = {
+ *      aiReady: aiReady,
+ *      aiReadyDark: aiReadyDark,
+ *      myFeature: myFeature,           // 新增
+ *      myFeatureDark: myFeatureDark,   // 新增
+ *    } as const;
+ *
+ * 4. 创建展示组件（参考 ExampleHighlightedFeature.tsx）
+ * 5. 在 LandingPage.tsx 中使用你的组件
+ */
 export const FeatureAssets = {
-  aiReady: "/assets/aiready.webp",                 // AI 功能展示
-  aiReadyDark: "/assets/aiready-dark.webp",        // AI 功能展示（深色）
-  payments: "/assets/payments.webp",               // 支付功能展示
-  fileUpload: "/assets/fileupload.webp",           // 文件上传展示
-  admin: "/assets/admin.webp",                     // 管理后台展示
-  email: "/assets/email.webp",                     // 邮件功能展示
-  blog: "/assets/blog.webp",                       // 博客功能展示
-  openApi: "/assets/openapi.webp",                 // API 文档展示
+  aiReady: aiReady,                 // AI 功能展示（浅色主题）
+  aiReadyDark: aiReadyDark,        // AI 功能展示（深色主题）
 } as const;
-
+                                 
 // ==================== 技术栈 Logo ====================
 // 第三方服务的 Logo，通常不需要替换
-export const TechStackLogos = {
+export const TechStackLogos = { 
   // Node.js
   nodejsLight: "/logos/nodejs-light.webp",
   nodejsDark: "/logos/nodejs-dark.webp",
@@ -64,13 +110,13 @@ export const TechStackLogos = {
 // ==================== 示例/案例展示 ====================
 // OpenSaaS 模板的示例，如果你有自己的案例可以替换
 export const ExampleAssets = {
-  example1: "/examples/kivo.webp",                 // 示例 1（可替换）
-  example2: "/examples/messync.webp",              // 示例 2（可替换）
-  example3: "/examples/microinfluencers.webp",     // 示例 3（可替换）
-  example4: "/examples/promptpanda.webp",          // 示例 4（可替换）
-  example5: "/examples/reviewradar.webp",          // 示例 5（可替换）
-  example6: "/examples/scribeist.webp",            // 示例 6（可替换）
-  example7: "/examples/searchcraft.webp",          // 示例 7（可替换）
+  example1: kivo,                 // 示例 1（可替换）
+  example2: messync,              // 示例 2（可替换）
+  example3: microinfluencerClub,  // 示例 3（可替换）
+  example4: promptpanda,          // 示例 4（可替换）
+  example5: reviewradar,          // 示例 5（可替换）
+  example6: scribeist,            // 示例 6（可替换）
+  example7: searchcraft,          // 示例 7（可替换）
 } as const;
 
 // ==================== AI 模板图片 ====================
@@ -96,13 +142,20 @@ export const ExampleAssets = {
 // ==================== 其他资源 ====================
 export const MiscAssets = {
   // 通用头像（da-boi）
-  daBoi: "/da-boi.webp",
+  daBoi: daBoiAvatar,
 
   // 图标
   iconCopyAlt: "/icons/icon-copy-alt.svg",
 } as const;
 
 // ==================== 导出所有资源 ====================
+/**
+ * 统一导出对象（可选）
+ *
+ * 你可以选择使用：
+ * - 分类导入：import { BrandAssets } from "../../shared/assets";
+ * - 统一导入：import { Assets } from "../../shared/assets"; 然后使用 Assets.brand.logo
+ */
 export const Assets = {
   brand: BrandAssets,
   features: FeatureAssets,
@@ -113,50 +166,16 @@ export const Assets = {
 
 // ==================== 使用指南 ====================
 /**
- * 📖 如何使用这个配置文件：
+ * 📖 如何替换品牌图片：
  *
- * 1️⃣ 在组件中导入需要的资源：
+ * 1. 将你的图片放到 `app/src/client/static/` 目录
+ * 2. 修改上面的 import 语句指向你的图片
+ *    例如：import logo from "../client/static/your-logo.webp";
+ * 3. 修改 BrandAssets.logoAlt 为你的品牌名
+ * 4. 所有使用 BrandAssets 的组件会自动更新
  *
- * ```tsx
- * import { BrandAssets, FeatureAssets } from "@src/shared/assets";
- *
- * export function Header() {
- *   return (
- *     <img src={BrandAssets.logo} alt={BrandAssets.logoAlt} />
- *   );
- * }
- * ```
- *
- * 2️⃣ 或者导入整个 Assets 对象：
- *
- * ```tsx
- * import { Assets } from "@src/shared/assets";
- *
- * export function Hero() {
- *   return (
- *     <img src={Assets.brand.logo} alt={Assets.brand.logoAlt} />
- *   );
- * }
- * ```
- *
- * 3️⃣ 替换品牌图片的步骤：
- *
- *   a. 准备你的图片文件（推荐使用 .webp 格式，体积小）
- *   b. 将图片放到 `app/src/client/static/` 目录
- *   c. 在这个文件中修改对应的路径
- *   d. 所有引用这个资源的地方会自动更新
- *
- * 4️⃣ 图片命名建议：
- *
- *   - Logo: logo.webp, logo-dark.webp
- *   - Banner: banner.webp, banner-og.webp (用于 Open Graph)
- *   - Icon: icon-16.png, icon-32.png, favicon.ico
- *   - 功能截图: feature-ai.webp, feature-payment.webp
- *
- * 5️⃣ 图片优化建议：
- *
- *   - 使用 WebP 格式（比 PNG/JPG 小 25-35%）
- *   - Logo 建议使用 SVG（矢量图，无损缩放）
- *   - 压缩图片：https://squoosh.app
- *   - Open Graph 图片建议尺寸：1200x630px
+ * 💡 提示：
+ * - 推荐使用 WebP 格式（体积小，质量好）
+ * - Logo 建议使用 SVG（矢量图，无损缩放）
+ * - 图片压缩工具：https://squoosh.app
  */

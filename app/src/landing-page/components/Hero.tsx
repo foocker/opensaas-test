@@ -1,7 +1,6 @@
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
 import { Button } from "../../client/components/ui/button";
-import openSaasBannerDark from "../../client/static/open-saas-banner-dark.svg";
-import openSaasBannerLight from "../../client/static/open-saas-banner-light.svg";
+import { BrandAssets } from "../../shared/assets";
 
 export default function Hero() {
   return (
@@ -34,16 +33,16 @@ export default function Hero() {
           <div className="mt-14 flow-root sm:mt-14">
             <div className="m-2 hidden justify-center rounded-xl md:flex lg:-m-4 lg:rounded-2xl lg:p-4">
               <img
-                src={openSaasBannerLight}
-                alt="App screenshot"
+                src={BrandAssets.bannerLight}
+                alt={BrandAssets.logoAlt}
                 width={1000}
                 height={530}
                 loading="lazy"
                 className="rounded-md shadow-2xl ring-1 ring-gray-900/10 dark:hidden"
               />
               <img
-                src={openSaasBannerDark}
-                alt="App screenshot"
+                src={BrandAssets.bannerDark}
+                alt={BrandAssets.logoAlt}
                 width={1000}
                 height={530}
                 loading="lazy"
