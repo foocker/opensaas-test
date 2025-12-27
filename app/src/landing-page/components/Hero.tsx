@@ -1,8 +1,12 @@
 import { Link as WaspRouterLink, routes } from "wasp/client/router";
 import { Button } from "../../client/components/ui/button";
 import { BrandAssets } from "../../shared/assets";
+import { FeatureFlags } from "../../shared/config";
+import AnimatedText from "./AnimatedText";
 
 export default function Hero() {
+  const showAnimations = FeatureFlags.landingPage.showTextAnimations;
+
   return (
     <div className="relative w-full pt-14">
       <TopGradient />
@@ -10,25 +14,71 @@ export default function Hero() {
       <div className="md:p-24">
         <div className="max-w-8xl mx-auto px-6 lg:px-8">
           <div className="lg:mb-18 mx-auto max-w-3xl text-center">
-            <h1 className="text-foreground text-5xl font-bold sm:text-6xl">
-              比 Google AI <span className="italic">便宜</span>{" "}
-              <span className="text-gradient-primary">70%</span> 的 AI 服务平台
-            </h1>
-            <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-8">
-              按需付费，Token 3折扣费。支持 GPT、Claude、Gemini 等主流模型，为开发者提供最实惠的 AI 解决方案。
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" variant="outline" asChild>
-                <WaspRouterLink to={routes.PricingPageRoute.to}>
-                  查看定价
-                </WaspRouterLink>
-              </Button>
-              <Button size="lg" variant="default" asChild>
-                <WaspRouterLink to={routes.SignupRoute.to}>
-                  立即开始 <span aria-hidden="true">→</span>
-                </WaspRouterLink>
-              </Button>
-            </div>
+            {showAnimations ? (
+              <AnimatedText
+                as="h1"
+                animation="scale"
+                duration={1.2}
+                className="text-foreground text-5xl font-bold sm:text-6xl"
+              >
+                比 Google AI <span className="italic">便宜</span>{" "}
+                <span className="text-gradient-primary">70%</span> 的 AI 服务平台
+              </AnimatedText>
+            ) : (
+              <h1 className="text-foreground text-5xl font-bold sm:text-6xl">
+                比 Google AI <span className="italic">便宜</span>{" "}
+                <span className="text-gradient-primary">70%</span> 的 AI 服务平台
+              </h1>
+            )}
+
+            {showAnimations ? (
+              <AnimatedText
+                as="p"
+                animation="blur"
+                delay={1.0}
+                duration={1.5}
+                className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-8"
+              >
+                按需付费，Token 3折扣费。支持 GPT、Claude、Gemini 等主流模型，为开发者提供最实惠的 AI 解决方案。
+              </AnimatedText>
+            ) : (
+              <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-8">
+                按需付费，Token 3折扣费。支持 GPT、Claude、Gemini 等主流模型，为开发者提供最实惠的 AI 解决方案。
+              </p>
+            )}
+
+            {showAnimations ? (
+              <AnimatedText
+                animation="slide-left"
+                delay={2.2}
+                duration={1.0}
+                className="mt-10 flex items-center justify-center gap-x-6"
+              >
+                <Button size="lg" variant="outline" asChild>
+                  <WaspRouterLink to={routes.PricingPageRoute.to}>
+                    查看定价
+                  </WaspRouterLink>
+                </Button>
+                <Button size="lg" variant="default" asChild>
+                  <WaspRouterLink to={routes.SignupRoute.to}>
+                    立即开始 <span aria-hidden="true">→</span>
+                  </WaspRouterLink>
+                </Button>
+              </AnimatedText>
+            ) : (
+              <div className="mt-10 flex items-center justify-center gap-x-6">
+                <Button size="lg" variant="outline" asChild>
+                  <WaspRouterLink to={routes.PricingPageRoute.to}>
+                    查看定价
+                  </WaspRouterLink>
+                </Button>
+                <Button size="lg" variant="default" asChild>
+                  <WaspRouterLink to={routes.SignupRoute.to}>
+                    立即开始 <span aria-hidden="true">→</span>
+                  </WaspRouterLink>
+                </Button>
+              </div>
+            )}
           </div>
           <div className="mt-14 flow-root sm:mt-14">
             <div className="m-2 hidden justify-center rounded-xl md:flex lg:-m-4 lg:rounded-2xl lg:p-4">

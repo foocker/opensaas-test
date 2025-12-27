@@ -5,7 +5,9 @@ import Clients from "./components/Clients";
 import ExamplesCarousel from "./components/ExamplesCarousel";
 import FAQ from "./components/FAQ";
 import FeaturesGrid from "./components/FeaturesGrid";
+import FloatingParticles from "./components/FloatingParticles";
 import Footer from "./components/Footer";
+import GradientOrbs from "./components/GradientOrbs";
 import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
 import {
@@ -21,8 +23,14 @@ export default function LandingPage() {
   const landingPageConfig = FeatureFlags.landingPage;
 
   return (
-    <div className="bg-background text-foreground">
-      <main className="isolate">
+    <div className="bg-background text-foreground relative">
+      {/* 背景动画效果 - 使用 fixed 定位确保覆盖整个视口 */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        {landingPageConfig.showFloatingParticles && <FloatingParticles />}
+        {landingPageConfig.showGradientOrbs && <GradientOrbs position="top-right" />}
+      </div>
+
+      <main className="relative z-10">
         {landingPageConfig.showHero && <Hero />}
         {landingPageConfig.showAITemplates && <AITemplates />}
         {landingPageConfig.showBananaPlayground && <BananaPlayground />}

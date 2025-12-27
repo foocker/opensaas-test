@@ -3,7 +3,7 @@
  * 通过修改这个文件来快速定制你的 SaaS 应用
  */
 
-import { fa } from "@faker-js/faker";
+import { fa, tr } from "@faker-js/faker";
 
 // ==================== 品牌配置 ====================
 export const SiteConfig = {
@@ -118,16 +118,21 @@ export const FeatureFlags = {
     showExamples: false,          // 示例轮播（展示使用案例）
     showClients: false,          // 客户/技术栈 Logo 展示（Used by）
     showHighlightedFeature: false, // 突出功能展示（大图 + 文字说明）
-    showFeatures: false,         // 传统列表式功能展示（2列布局） 似乎没效果 TODO 
+    showFeatures: false,         // 传统列表式功能展示（2列布局） 似乎没效果 TODO
     showFeaturesGrid: false,      // Bento 风格功能网格（推荐使用）
     showTestimonials: false,      // 用户评价（What Our Users Say）
     showFAQ: false,               // 常见问题（手风琴式展开）
     showFooter: true,            // 页脚导航
+
+    // 动画效果配置
+    showFloatingParticles: false, // 浮动粒子动画（背景装饰）- 已移除
+    showGradientOrbs: false,      // 渐变光球效果（现代化视觉）- 已移除
+    showTextAnimations: true,     // 文字动画效果（标题、副标题等）
   },
 
   // 认证功能
   auth: {
-    emailPassword: true,   // 邮箱密码登录
+    emailPassword: false,   // 邮箱密码登录
     googleOAuth: false,    // Google OAuth（中国大陆建议关闭）
   },
 
